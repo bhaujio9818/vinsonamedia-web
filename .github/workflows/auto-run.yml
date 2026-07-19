@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Firebase
-        run: npm install firebase
+      - name: Install Dependencies
+        run: npm install firebase axios
 
       - name: Run Scraper Bot
         run: node scraper.js
