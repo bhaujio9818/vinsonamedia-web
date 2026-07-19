@@ -101,7 +101,7 @@
         <span id="notif-text"></span>
     </div>
 
-    <!-- 🚨 AdSense Mandatory Legal Footer (ईमेल यहाँ अपडेटेड है) -->
+    <!-- 🚨 AdSense Mandatory Legal Footer -->
     <footer>
         <div class="footer-links">
             <a href="#privacy" onclick="showLegalPage('privacy')">Privacy Policy</a> | 
@@ -125,6 +125,7 @@
 
     <button id="scrollTopBtn" title="ऊपर जाएं">▲</button>
 
-    <script src="app.js"></script>
+    <!-- 💡 यहाँ प्रकार को बदलकर module कर दिया गया है ताकि Firebase SDK सही से लोड हो सके -->
+    <script type="module" src="app.js"></script>
 </body>
 </html>
