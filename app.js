@@ -1,6 +1,6 @@
 // 1. Firebase SDK Imports (CDN के ज़रिए लाइव कनेक्शन)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, query, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // 2. आपकी Vinsona Media की सीक्रेट चाबी 🔑
 const firebaseConfig = {
@@ -20,10 +20,11 @@ const db = getFirestore(app);
 // 3. लाइव डेटा स्टोर करने के लिए एरे वेरिएबल
 let sampleData = []; 
 
-// 4. फ़ायरबेस से लाइव ऑटोमैटिक डेटा खींचने का लॉजिक
+// 4. फ़ायरबेस से लाइव ऑटोमैटिक डेटा खींचने का लॉजिक (तारीख का एरर फिक्स किया हुआ 🚀)
 function listenToTrendingContent() {
     console.log("📡 फ़ायरबेस लाइव डेटाबेस से कनेक्ट हो रहा है...");
-    const q = query(collection(db, "trending_reels"), orderBy("createdAt", "desc"), limit(100));
+    // 💡 यहाँ से orderBy हटा दिया है क्योंकि आपके Firestore में createdAt फ़ील्ड नहीं है।
+    const q = query(collection(db, "trending_reels"), limit(100));
     
     onSnapshot(q, (querySnapshot) => {
         sampleData = [];
@@ -78,7 +79,7 @@ if(localStorage.getItem('cookie_accepted') && cookieNotice) { cookieNotice.class
 window.acceptCookies = function() { localStorage.setItem('cookie_accepted', 'true'); if(cookieNotice) cookieNotice.classList.add('hidden'); }
 
 const legalPages = {
-    privacy: `<h2>Privacy Policy</h2><p>Vinsona Media में आपका स्वागत है। हम अपने यूज़र्स की प्राइवेसी का पूरा सम्मान करते हैं।</p>`,
+    privacy: `<h2>Privacy Policy</h2><p>Vinsona Media में आपका स्वागत है। हम अपने यूज़र्स की प्राइवेसी का पूरा सम्मान करते हैं</p>`,
     terms: `<h2>Terms & Conditions</h2><p>Vinsona Media का उपयोग करके आप निम्नलिखित शर्तों से सहमत होते हैं:</p>`,
     dmca: `<h2>DMCA / Copyright Policy</h2><p>यदि आप किसी सामग्री के मालिक हैं और हटाना चाहते हैं, तो <strong>vinsona9818@gmail.com</strong> पर ईमेल करें।</p>`,
     contact: `<h2>Contact Us</h2><p><strong>ईमेल:</strong> vinsona9818@gmail.com</p>`
