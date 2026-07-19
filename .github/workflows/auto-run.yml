@@ -1,24 +1,28 @@
-name: Daily 40 Videos Fetcher
+name: Vinsona Media Auto Scraper
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    # यह रोज़ सुबह भारतीय समयानुसार (IST) 6:30 बजे अपने आप रन होगा
+    - cron: '0 1 * * *'
+  workflow_dispatch: # इससे आप जब चाहें हाथ से भी रन कर सकते हैं
 
 jobs:
-  run-bot:
+  run-scraper:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    - name: Checkout repository code
+      uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+    - name: Setup Node.js environment
+      uses: actions/checkout@v4
+      with:
+        node-version: '20'
 
-      - name: Install Dependencies
-        run: npm install firebase axios
+    - name: Install Project Dependencies (Firebase & Axios)
+      run: |
+        npm init -y
+        npm install firebase axios
 
-      - name: Run Scraper Bot
-        run: node scraper.js
+    - name: Run Secret Scraper Script
+      run: node scraper.js
