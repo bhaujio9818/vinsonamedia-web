@@ -1,6 +1,6 @@
-// 1. Firebase SDK Imports (CDN के ज़रिए लाइव कनेक्शन)
+// 1. Firebase SDK Imports (CDN के ज़रिए लाइव कनेक्शन) - 💡 यहाँ orderBy को दोबारा जोड़ा है
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, query, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // 2. आपकी Vinsona Media की सीक्रेट चाबी 🔑
 const firebaseConfig = {
@@ -20,11 +20,11 @@ const db = getFirestore(app);
 // 3. लाइव डेटा स्टोर करने के लिए एरे वेरिएबल
 let sampleData = []; 
 
-// 4. फ़ायरबेस से लाइव ऑटोमैटिक डेटा खींचने का लॉजिक (तारीख का एरर फिक्स किया हुआ 🚀)
+// 4. फ़ायरबेस से लाइव ऑटोमैटिक डेटा खींचने का लॉजिक (डॉक्यूमेंट आईडी के हिसाब से सॉर्टेड 🚀)
 function listenToTrendingContent() {
     console.log("📡 फ़ायरबेस लाइव डेटाबेस से कनेक्ट हो रहा है...");
-    // 💡 यहाँ से orderBy हटा दिया है क्योंकि आपके Firestore में createdAt फ़ील्ड नहीं है।
-    const q = query(collection(db, "trending_reels"), limit(100));
+    // 💡 यहाँ "__name__" (डॉक्यूमेंट आईडी) के हिसाब से लेटेस्ट डेटा को सबसे ऊपर लाने का पक्का लॉजिक डाला है
+    const q = query(collection(db, "trending_reels"), orderBy("__name__", "desc"), limit(100));
     
     onSnapshot(q, (querySnapshot) => {
         sampleData = [];
