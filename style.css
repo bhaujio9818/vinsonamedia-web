@@ -1,176 +1,395 @@
-[data-theme="dark"] {
-    --bg-color: #0d0d11;
-    --card-bg: #16161f;
+/* 🎨 Vinsona Media - Premium Dark Theme Stylesheet */
+
+:root {
+    --bg-color: #0d0e12;
+    --card-bg: #161820;
     --text-color: #ffffff;
-    --border-color: #222;
-}
-[data-theme="light"] {
-    --bg-color: #f4f4f9;
-    --card-bg: #ffffff;
-    --text-color: #111116;
-    --border-color: #dddddd;
+    --text-muted: #8a8d98;
+    --primary-gradient: linear-gradient(135deg, #ff416c, #ff4b2b);
+    --secondary-gradient: linear-gradient(135deg, #11998e, #38ef7d);
+    --border-color: #242736;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+[data-theme="light"] {
+    --bg-color: #f4f6f9;
+    --card-bg: #ffffff;
+    --text-color: #1a1d24;
+    --text-muted: #606470;
+    --border-color: #e1e4ed;
+    --shadow: 0 8px 24px rgba(149, 157, 165, 0.15);
+}
+
+* {
     margin: 0;
-    padding: 20px;
-    text-align: center;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: background 0.3s, color 0.3s;
 }
 
-header h1 {
-    color: #ff007f;
-    font-size: 2.5rem;
-    margin-bottom: 5px;
-    text-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding-bottom: 60px;
 }
 
+/* 🌓 Theme Toggle Button */
 .theme-switch {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
-    background: #ff007f;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
+    z-index: 100;
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 10px 16px;
+    border-radius: 30px;
     cursor: pointer;
-    font-weight: bold;
-    z-index: 10;
+    font-weight: 600;
+    box-shadow: var(--shadow);
+}
+
+/* 🚀 Header Design */
+header {
+    text-align: center;
+    padding: 60px 20px 30px 20px;
+    background: radial-gradient(circle at top, rgba(255, 65, 108, 0.1), transparent);
+}
+
+header h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+/* 🔍 Search Box */
+.search-box {
+    max-width: 600px;
+    margin: 0 auto 30px auto;
 }
 
 .search-box input {
-    width: 80%;
-    max-width: 500px;
-    padding: 12px 20px;
-    border-radius: 25px;
-    border: 2px solid #ff007f;
+    width: 100%;
+    padding: 16px 24px;
     background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
     color: var(--text-color);
-    font-size: 16px;
+    font-size: 1rem;
     outline: none;
+    box-shadow: var(--shadow);
+}
+
+.search-box input:focus {
+    border-color: #ff416c;
+}
+
+/* 🏷️ Categories & Filters */
+.category-container, .tag-filter-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
-.category-container {
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.cat-btn {
-    background: var(--card-bg);
+.cat-btn, .tag-filter-btn {
+    background-color: var(--card-bg);
     color: var(--text-color);
     border: 1px solid var(--border-color);
-    padding: 8px 18px;
+    padding: 10px 20px;
     border-radius: 20px;
     cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .cat-btn.active, .cat-btn:hover {
-    background: #ff007f;
-    color: white;
-    border-color: #ff007f;
+    background: var(--primary-gradient);
+    color: #fff;
+    border: none;
 }
 
-.tag-filter-container { margin-bottom: 30px; }
-.tag-filter-btn { background: #222; border: 1px dashed #ff007f; color: #ff007f; padding: 5px 15px; border-radius: 5px; cursor: pointer; margin: 0 5px; font-weight: bold; }
-.tag-filter-btn:hover { background: #ff007f; color: white; }
+.tag-filter-btn {
+    background: none;
+    border-color: #ff416c;
+    color: #ff416c;
+}
 
-#content-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+#filter-trending {
+    background-color: rgba(255, 65, 108, 0.1);
+}
+
+/* 🖥️ PC & LAPTOP GRID SYSTEM (Main Magic 🌟) */
+main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    /* मोबाइल में 1 कॉलम, टैबलेट में 2 और PC पर अपने आप 3 या 4 कॉलम बनाएगा */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 25px;
 }
 
+/* 🗂️ Premium Card Style */
 .card {
-    background: var(--card-bg);
-    border-radius: 15px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    position: relative;
+    background-color: var(--card-bg);
     border: 1px solid var(--border-color);
-    text-align: left;
-    transition: transform 0.3s ease;
-}
-.card:hover { transform: translateY(-8px); border-color: #ff007f; }
-
-.shimmer-card {
-    width: 340px;
-    height: 250px;
-    background: linear-gradient(90deg, #222 25%, #333 50%, #222 75%);
-    background-size: 200% 100%;
-    animation: loadingShimmer 1.5s infinite;
-    border-radius: 15px;
-}
-@keyframes loadingShimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .trending-badge {
     position: absolute;
     top: 15px;
     left: 15px;
-    background: linear-gradient(45deg, #ff007f, #7209b7);
+    background: var(--primary-gradient);
     color: white;
-    font-size: 10px;
-    font-weight: bold;
     padding: 4px 10px;
-    border-radius: 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    z-index: 5;
 }
 
-.card h3 { margin-top: 35px; font-size: 18px; }
-.star-rating { color: #ffb703; font-size: 14px; margin-bottom: 8px; }
-.card-stats { display: flex; gap: 15px; font-size: 12px; color: #aaa; margin-bottom: 10px; }
-.fav-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #555; font-size: 22px; cursor: pointer; }
-.fav-btn.active { color: #ff007f; }
+.fav-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 5;
+}
 
-audio { width: 100%; margin: 10px 0; border-radius: 10px; }
+.fav-btn.active {
+    color: #ff416c;
+}
 
-/* विज़ुअलाइज़र वेव्स */
-.visualizer { display: flex; justify-content: center; align-items: flex-end; height: 20px; gap: 3px; margin: 10px 0; }
-.wave-bar { width: 4px; height: 5px; background-color: #ff007f; animation: bounce 0.8s ease infinite alternate; animation-play-state: paused; }
-.wave-bar:nth-child(2n) { background-color: #4cc9f0; animation-duration: 0.5s; }
-.wave-bar:nth-child(3n) { background-color: #7209b7; animation-duration: 0.6s; }
-@keyframes bounce { 100% { height: 20px; } }
+.card h3 {
+    font-size: 1.2rem;
+    margin: 15px 0 8px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-.button-group { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
-.row-btns { display: flex; gap: 10px; }
+.star-rating {
+    color: #ffcc00;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
 
-.download-btn { text-decoration: none; padding: 10px; border-radius: 8px; color: white; font-weight: bold; font-size: 14px; text-align: center; flex: 1; cursor: pointer; border: none; }
-.audio-btn { background-color: #00b4d8; }
-.video-btn { background-color: #7209b7; }
-.whatsapp-btn { background-color: #25d366; color: white; font-weight: bold; border-radius: 8px; padding: 10px; text-decoration: none; text-align: center; }
-.copy-btn { background-color: #333344; color: #ccc; font-weight: bold; border-radius: 8px; padding: 8px; border: 1px solid #444; cursor: pointer; text-align: center; }
+.card-stats {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-bottom: 15px;
+}
 
-.load-more-container { margin: 40px 0; }
-.load-more-btn { background-color: var(--card-bg); color: var(--text-color); border: 2px solid #ff007f; padding: 12px 30px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; }
+/* 🎬 Video Preview Window */
+.video-preview-box {
+    position: relative;
+    transition: transform 0.2s;
+}
 
-.cookie-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111; color: white; padding: 15px; display: flex; justify-content: space-around; align-items: center; z-index: 3000; font-size: 14px; }
-.cookie-bar.hidden { display: none !important; }
-.cookie-bar button { background: #ff007f; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+.video-preview-box:hover {
+    transform: scale(1.02);
+}
 
-footer { margin-top: 60px; padding: 30px 20px; background: #111116; color: #aaa; font-size: 13px; border-top: 1px solid #222; }
-.footer-links a { color: #ff007f; text-decoration: none; font-weight: bold; margin: 0 5px; }
-.disclaimer { max-width: 800px; margin: 15px auto; line-height: 1.6; color: #888; text-align: justify; }
+/* 🔘 VIP Alignment Buttons (Video Left, MP3 Right) */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
 
-.timer-countdown { font-size: 48px; font-weight: bold; color: #ff007f; margin: 20px 0; }
-.modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:4000; }
-.modal-content { background: #16161f; border: 2px solid #ff007f; padding:30px; border-radius:15px; max-width:500px; color:white; text-align:left; position: relative; }
-.legal-content { max-height: 80% !important; overflow-y: auto; }
-.modal.hidden { display: none !important; }
-.close-modal { position: absolute; top: 10px; right: 15px; color: white; font-size: 28px; cursor: pointer; }
+.row-btns {
+    display: flex;
+    gap: 10px;
+}
 
-#scrollTopBtn { position: fixed; bottom: 70px; right: 20px; display: none; border: none; background-color: #ff007f; color: white; padding: 15px; border-radius: 50%; font-size: 18px; z-index: 99; }
-.notification { position: fixed; bottom: 20px; left: 20px; background-color: #16161f; border-left: 4px solid #ff007f; padding: 12px 20px; border-radius: 8px; z-index: 1000; font-size: 14px; color: #fff; transition: all 0.5s; }
-.notification.hidden { opacity: 0; transform: translateY(50px); pointer-events: none; }
+.download-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    color: white;
+}
+
+.video-btn {
+    background: var(--primary-gradient);
+}
+
+.audio-btn {
+    background: var(--secondary-gradient);
+}
+
+.whatsapp-btn {
+    display: block;
+    width: 100%;
+    background-color: #25d366;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* 🔄 Load More Button */
+.load-more-container {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.load-more-btn {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 14px 35px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+}
+
+/* 🎥 Video Theatre Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.hidden { display: none !important; }
+
+.modal-content {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    position: relative;
+    box-shadow: var(--shadow);
+}
+
+.video-modal-content {
+    max-width: 600px;
+    padding: 20px;
+}
+
+.video-player-wrapper {
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: var(--text-color);
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.timer-countdown {
+    font-size: 4rem;
+    font-weight: 800;
+    color: #ff416c;
+    margin: 20px 0;
+}
+
+/* 🍪 Cookie Consent Bar */
+.cookie-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 999;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+}
+
+.cookie-btn {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* 📄 Footer Styling */
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 50px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.footer-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.disclaimer {
+    margin: 15px auto;
+    max-width: 800px;
+    font-size: 12px;
+}
+
+/* ⏳ Shimmer Loading Effect */
+.shimmer-card {
+    height: 380px;
+    background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+    background-size: 200% 100%;
+    animation: loadingShimmer 1.5s infinite;
+    border-radius: 16px;
+}
+
+@keyframes loadingShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
