@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinsona Media - Premium Status & Tones</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- थीम बदलने का बटन -->
+    <button id="themeToggleBtn" class="theme-switch">🌓 मोड बदलें</button>
+
+    <header>
+        <h1>🔥 Vinsona Media</h1>
+        <p>प्रीमियम रील्स वीडियो और रिंगटोन्स एक क्लिक में डाउनलोड करें</p>
+        
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="यहाँ रिंगटोन या वीडियो का नाम खोजें...">
+        </div>
+
+        <div class="category-container">
+            <button class="cat-btn active" data-category="all">⚡ सब कुछ</button>
+            <button class="cat-btn" data-category="ringtone">🎵 रिंगटोन</button>
+            <button class="cat-btn" data-category="status">🎥 वीडियो स्टेटस</button>
+            <button class="cat-btn" data-category="gaming">🎮 गेमिंग स्पेशल</button>
+        </div>
+
+        <div class="tag-filter-container">
+            <button class="tag-filter-btn" id="filter-trending">🔥 हॉट ट्रेंडिंग</button>
+            <button class="tag-filter-btn" id="filter-all-tags">✨ सब दिखाएं</button>
+        </div>
+    </header>
+
+    <main id="content-container">
+        <!-- शिम्मर लोडिंग इफ़ेक्ट (डेटा app.js से लाइव आएगा) -->
+        <div class="shimmer-card"></div>
+        <div class="shimmer-card"></div>
+    </main>
+
+    <div class="load-more-container">
+        <button id="loadMoreBtn" class="load-more-btn">🔄 और दिखाएं (Load More)</button>
+    </div>
+
+    <!-- 🎬 बड़ा वीडियो पॉपअप मॉडल (वीडियो प्ले करने के लिए) -->
+    <div id="video-popup-modal" class="modal hidden">
+        <div class="modal-content video-modal-content">
+            <span class="close-modal" id="close-video-modal">&times;</span>
+            
+            <!-- वीडियो प्लेयर -->
+            <div class="video-player-wrapper">
+                <video id="popup-video-player" controls width="100%" height="auto" poster="">
+                    <source id="popup-video-source" src="" type="video/mp4">
+                    आपका ब्राउज़र वीडियो सपोर्ट नहीं करता है।
+                </video>
+            </div>
+            
+            <!-- वीडियो की डिटेल्स -->
+            <div class="video-details">
+                <h3 id="popup-video-title">Loading...</h3>
+                <div class="video-meta">
+                    <span class="rating">⭐⭐⭐⭐⭐</span>
+                    <span id="popup-video-views">👁️ 0 व्यूज</span>
+                </div>
+                
+                <!-- डाउनलोड बटन -->
+                <div class="popup-actions">
+                    <button id="popup-download-btn" class="download-btn">📥 Video Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- डाउनलोड टाइमर मॉडल (AdSense Policy Compliant) -->
+    <div id="download-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>आपकी फ़ाइल तैयार हो रही है... 🚀</h3>
+            <div id="timer-number" class="timer-countdown">3</div>
+            <p style="font-size: 12px; color: #aaa;">विज्ञापन आपके डाउनलोड को फ्री रखने में मदद करते हैं</p>
+        </div>
+    </div>
+
+    <!-- User Engagement Exit Pop-up -->
+    <div id="exit-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Rukिए, गुलाब भाई! 👋</h2>
+            <p>जाने से पहले आज की सबसे हॉट और वायरल रिंगटोन को डाउनलोड करना न भूलें!</p>
+            <button onclick="closeExitModal()" class="download-btn audio-btn" style="max-width: 200px; margin: 10px auto;">🔥 बेस्ट टोन देखें</button>
+        </div>
+    </div>
+
+    <!-- AdSense Cookie Consent Notice (क्रोम/एडसेंस पॉलिसी) -->
+    <div id="cookie-notice" class="cookie-bar">
+        <p>हम आपकी पसंद को याद रखने और बेहतर अनुभव के लिए कुकीज़ (Cookies) का उपयोग करते हैं। 
+           <a href="#privacy" onclick="showLegalPage('privacy')">पॉलिसी पढ़ें</a>
+        </p>
+        <button onclick="acceptCookies()" class="cookie-btn">Accept</button>
+    </div>
+
+    <!-- Live Notification Pop-up -->
+    <div id="live-notification" class="notification hidden">
+        <span id="notif-text"></span>
+    </div>
+
+    <!-- 🚨 AdSense Mandatory Legal Footer (ईमेल यहाँ अपडेटेड है) -->
+    <footer>
+        <div class="footer-links">
+            <a href="#privacy" onclick="showLegalPage('privacy')">Privacy Policy</a> | 
+            <a href="#terms" onclick="showLegalPage('terms')">Terms & Conditions</a> | 
+            <a href="#dmca" onclick="showLegalPage('dmca')">DMCA / Copyright</a> | 
+            <a href="mailto:vinsona9818@gmail.com">Contact Us (vinsona9818@gmail.com)</a>
+        </div>
+        <p class="disclaimer">
+            <strong>डिस्क्लेमर (Disclaimer):</strong> Vinsona Media एक प्रमोशनल प्लेटफॉर्म है। यहाँ उपलब्ध सभी मीडिया फ़ाइलें इंटरनेट के सार्वजनिक डोमेन से ली गई हैं। हम किसी भी कॉपीराइट सामग्री के मालिक नहीं हैं। यदि आपका कोई कंटेंट यहाँ है और आप उसे हटाना चाहते हैं, तो कृपया DMCA पेज के माध्यम से या सीधे हमें **vinsona9818@gmail.com** पर संपर्क करें।
+        </p>
+        <p class="copyright">&copy; 2026 Vinsona Media. All Rights Reserved.</p>
+    </footer>
+
+    <!-- लीगल पेजों को दिखाने के लिए पॉप-अप मॉडल -->
+    <div id="legal-modal" class="modal hidden">
+        <div class="modal-content legal-content">
+            <span class="close-modal" onclick="closeLegalPage()">&times;</span>
+            <div id="legal-text"></div>
+        </div>
+    </div>
+
+    <button id="scrollTopBtn" title="ऊपर जाएं">▲</button>
+
+    <script src="app.js"></script>
+</body>
+</html>
