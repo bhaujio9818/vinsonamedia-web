@@ -65,7 +65,7 @@ const closeVideoModalBtn = document.getElementById("close-video-modal");
 
 let currentCategory = 'all';
 let showOnlyTrending = false;
-let itemsShown = 2;
+let itemsShown = 40; // 💡 फिक्स: यहाँ 2 की जगह 40 किया ताकि एक साथ सारे वीडियो दिखें!
 
 themeToggleBtn.addEventListener('click', () => {
     const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -75,18 +75,17 @@ themeToggleBtn.addEventListener('click', () => {
 if(localStorage.getItem('cookie_accepted')) { cookieNotice.classList.add('hidden'); }
 window.acceptCookies = function() { localStorage.setItem('cookie_accepted', 'true'); cookieNotice.classList.add('hidden'); }
 
-// 📧 ईमेल vinsona9818@gmail.com से अपडेट कर दी गई है
 const legalPages = {
-    privacy: `<h2>Privacy Policy</h2><p>Vinsona Media में आपका स्वागत है। हम अपने यूज़र्स की प्राइवेसी का पूरा सम्मान करते हैं।</p><p><strong>डेटा संग्रहण:</strong> हम अपने सर्वर पर आपका कोई भी निजी डेटा स्टोर नहीं करते हैं। हमारी वेबसाइट केवल बेहतर अनुभव के लिए कुकीज़ (Cookies) का उपयोग करती है।</p><p><strong>गूगल एडसेंस:</strong> हम विज्ञापन दिखाने के लिए Third-party Vendors जैसे Google AdSense का उपयोग कर सकते हैं।</p>`,
-    terms: `<h2>Terms & Conditions</h2><p>Vinsona Media का उपयोग करके आप निम्नलिखित शर्तों से सहमत होते हैं:</p><p>1. यह वेबसाइट केवल व्यक्तिगत उपयोग के लिए है।</p><p>2. यहाँ उपलब्ध सभी मीडिया फाइल्स इंटरनेट के पब्लिक डोमेन से सिर्फ रिव्यू के लिए हैं।</p>`,
-    dmca: `<h2>DMCA / Copyright Policy</h2><p>हम बौद्धिक संपदा अधिकारों का सम्मान करते हैं।</p><p>यदि आप किसी ऐसी सामग्री के मालिक हैं जो हमारी वेबसाइट पर आपकी अनुमति के बिना पोस्ट की गई है, तो हमें <strong>vinsona9818@gmail.com</strong> पर ईमेल करें। हम उसे 24 घंटे में हटा देंगे।</p>`,
-    contact: `<h2>Contact Us</h2><p>यदि आपके पास कोई सुझाव, शिकायत या व्यावसायिक पूछताछ है, तो संपर्क करें:</p><p><strong>ईमेल:</strong> vinsona9818@gmail.com</p>`
+    privacy: `<h2>Privacy Policy</h2><p>Vinsona Media में आपका स्वागत है। हम अपने यूज़र्स की प्राइवेसी का पूरा सम्मान करते हैं।</p>`,
+    terms: `<h2>Terms & Conditions</h2><p>Vinsona Media का उपयोग करके आप निम्नलिखित शर्तों से सहमत होते हैं:</p>`,
+    dmca: `<h2>DMCA / Copyright Policy</h2><p>यदि आप किसी सामग्री के मालिक हैं और हटाना चाहते हैं, तो <strong>vinsona9818@gmail.com</strong> पर ईमेल करें।</p>`,
+    contact: `<h2>Contact Us</h2><p><strong>ईमेल:</strong> vinsona9818@gmail.com</p>`
 };
 
 window.showLegalPage = function(pageKey) { legalText.innerHTML = legalPages[pageKey]; legalModal.classList.remove('hidden'); }
 window.closeLegalPage = function() { legalModal.classList.add('hidden'); }
 
-// 🎬 वीडियो पॉपअप खोलने का फंक्शन
+// 🎬 वीडियो पॉपअप खोलने का फंक्शन (Reels/Shorts Embed सपोर्ट के साथ)
 window.openVideoPopup = function(itemId) {
     const item = sampleData.find(d => d.id === itemId);
     if (!item) return;
@@ -94,26 +93,31 @@ window.openVideoPopup = function(itemId) {
     popupVideoTitle.innerText = item.title;
     popupVideoViews.innerText = `👁️ ${item.views} व्यूज`;
     
-    // वीडियो सोर्स सेट करना
-    popupVideoSource.src = item.videoUrl;
-    popupVideoPlayer.load(); // नया सोर्स लोड करने के लिए
-    popupVideoPlayer.play(); // ऑटोमैटिक प्ले करने के लिए
+    // 💡 सोशल मीडिया वीडियो प्लेयर सेटअप
+    const wrapper = document.querySelector('.video-player-wrapper');
+    if (item.videoUrl.includes('embed') || item.videoUrl.includes('instagram.com') || item.videoUrl.includes('youtube.com')) {
+        wrapper.innerHTML = `<iframe src="${item.videoUrl}" width="100%" height="450px" frameborder="0" allowfullscreen allow="autoplay"></iframe>`;
+    } else {
+        wrapper.innerHTML = `
+            <video id="popup-video-player" controls width="100%" height="auto">
+                <source src="${item.videoUrl}" type="video/mp4">
+            </video>
+        `;
+    }
 
-    // डाउनलोड बटन पर टाइमर ट्रिगर सेट करना
     popupDownloadBtn.onclick = function() {
         videoPopupModal.classList.add("hidden");
-        popupVideoPlayer.pause();
         triggerTimer(item.videoUrl);
     };
 
     videoPopupModal.classList.remove("hidden");
 };
 
-// पॉपअप बंद करने का लॉजिक
 if(closeVideoModalBtn) {
     closeVideoModalBtn.addEventListener('click', () => {
         videoPopupModal.classList.add("hidden");
-        popupVideoPlayer.pause(); // वीडियो बंद होने पर प्लेयर भी रुक जाएगा
+        const wrapper = document.querySelector('.video-player-wrapper');
+        wrapper.innerHTML = ''; // बंद करने पर वीडियो बंद हो जाएगा
     });
 }
 
@@ -134,12 +138,10 @@ function displayCards(data) {
             <h3>${item.title}</h3>
             <div class="star-rating">${item.rating}</div>
             <div class="card-stats"><span>👁️ ${item.views} व्यूज</span><span>📥 ${item.downloads} डाउनलोड</span></div>
-            <audio id="audio-${item.id}" onplay="playVisualizer('${item.id}')" onpause="stopVisualizer('${item.id}')" controls><source src="${item.audioUrl}" type="audio/mp3"></audio>
-            <div id="viz-${item.id}" class="visualizer"><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div></div>
+            <audio id="audio-${item.id}" controls><source src="${item.audioUrl}" type="audio/mp3"></audio>
             <div class="button-group">
                 <div class="row-btns">
                     <button class="download-btn audio-btn" onclick="triggerTimer('${item.audioUrl}')">📥 MP3</button>
-                    <!-- 🎥 वीडियो पर क्लिक करने से अब सीधे बड़ा पॉपअप खुलेगा -->
                     <button class="download-btn video-btn" onclick="openVideoPopup('${item.id}')">🎥 Video</button>
                 </div>
                 <a href="${whatsappUrl}" target="_blank" class="whatsapp-btn">🟢 Share on WhatsApp</a>
@@ -150,9 +152,6 @@ function displayCards(data) {
     });
     if(itemsShown >= data.length) { loadMoreBtn.style.display = "none"; } else { loadMoreBtn.style.display = "inline-block"; }
 }
-
-window.playVisualizer = function(id) { document.querySelectorAll(`#viz-${id} .wave-bar`).forEach(w => w.style.animationPlayState = 'running'); }
-window.stopVisualizer = function(id) { document.querySelectorAll(`#viz-${id} .wave-bar`).forEach(w => w.style.animationPlayState = 'paused'); }
 
 window.triggerTimer = function(url) {
     downloadModal.classList.remove("hidden");
@@ -165,7 +164,7 @@ window.triggerTimer = function(url) {
     }, 1000);
 }
 
-loadMoreBtn.addEventListener("click", () => { itemsShown += 2; filterData(); });
+loadMoreBtn.addEventListener("click", () => { itemsShown += 20; filterData(); });
 
 window.toggleFavorite = function(id) {
     if(favorites.includes(id)) { favorites = favorites.filter(favId => favId !== id); } else { favorites.push(id); }
@@ -182,13 +181,13 @@ function filterData() {
     displayCards(filtered);
 }
 
-document.getElementById('filter-trending').addEventListener('click', () => { showOnlyTrending = true; itemsShown = 2; filterData(); });
-document.getElementById('filter-all-tags').addEventListener('click', () => { showOnlyTrending = false; itemsShown = 2; filterData(); });
-searchInput.addEventListener('input', () => { itemsShown = 2; filterData(); });
+document.getElementById('filter-trending').addEventListener('click', () => { showOnlyTrending = true; itemsShown = 40; filterData(); });
+document.getElementById('filter-all-tags').addEventListener('click', () => { showOnlyTrending = false; itemsShown = 40; filterData(); });
+searchInput.addEventListener('input', () => { itemsShown = 40; filterData(); });
 catButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
         catButtons.forEach(b => b.classList.remove('active')); e.target.classList.add('active');
-        currentCategory = e.target.getAttribute('data-category'); itemsShown = 2; filterData();
+        currentCategory = e.target.getAttribute('data-category'); itemsShown = 40; filterData();
     });
 });
 
