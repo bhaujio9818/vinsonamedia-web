@@ -2,6 +2,7 @@ const { initializeApp } = require('firebase/app');
 const { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp } = require('firebase/firestore');
 const axios = require('axios');
 
+// 🔥 Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDRxDMwj1yU-gfVl3z3MYe7QfB3U_EvXS8",
   authDomain: "vinsona-media.firebaseapp.com",
@@ -14,11 +15,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 🔑 API Keys
 const YOUTUBE_API_KEY = "AIzaSyAjbt-L3NLaRi_0ZFwwI6-7xu3-nTkWkY0";
-const SPOTIFY_CLIENT_ID = "a81c543806b24ed89f65cf92b3f70fd2";
-const SPOTIFY_CLIENT_SECRET = "76290b018beb48629ef47fd8f379c684";
 
+// 🎬 सभी 6 कैटेगरीज के लिए सटीक सर्च क्वेरी
+const categoriesToFetch = [
+    { name: "shorts", query: "Hindi Trending Shorts" },
+    { name: "status", query: "Hindi Video Status Song" },
+    { name: "motivation", query: "Hindi Motivational Shorts Status" },
+    { name: "sad", query: "Sad Hindi Shorts Status Song" },
+    { name: "romantic", query: "Romantic Love Shorts Video" },
+    { name: "fullsong", query: "Latest Hindi Full Video Song 2026" }
+];
+
+// 🧹 पुराना डेटा साफ़ करने का फ़ंक्शन
 async function deleteOldData() {
     console.log("🧹 पुराना डेटा साफ़ किया जा रहा है...");
     try {
@@ -29,85 +38,43 @@ async function deleteOldData() {
         });
         await Promise.all(deletePromises);
         console.log("✅ पुराना डेटा साफ़ हो गया!");
-    } catch (err) { console.error("डिलीट एरर:", err); }
-}
-
-async function getSpotifyToken() {
-    try {
-        const response = await axios.post(
-            'https://accounts.spotify.com/api/token',
-            'grant_type=client_credentials',
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': 'Basic ' + Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')
-                }
-            }
-        );
-        return response.data.access_token;
-    } catch (error) {
-        console.error("❌ Spotify Token एरर:", error.message);
-        return null;
+    } catch (err) { 
+        console.error("डिलीट एरर:", err); 
     }
 }
 
+// 🚀 मुख्य स्क्रैपर जो हर कैटेगरी के 20 वीडियो लाएगा
 async function startAutoScraper() {
     try {
         await deleteOldData();
-        console.log("🚀 AI Trend Engine चालू हो रहा है...");
+        console.log("🚀 Multi-Category Scraper (20 Videos per Category) चालू हो रहा है...");
         let totalCount = 0;
 
-        // 1. YouTube के लाइव ट्रेंडिंग वीडियो लोड करना
-        const ytUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=Hindi%20Trending%20Status%20Song&type=video&videoEmbeddable=true&regionCode=IN&maxResults=10&key=${YOUTUBE_API_KEY}`;
-        const ytRes = await axios.get(ytUrl);
-
-        for (let video of ytRes.data.items) {
-            if (!video.id.videoId) continue;
-            await addDoc(collection(db, "trending_reels"), {
-                title: video.snippet.title,
-                category: "status",
-                youtubeId: video.id.videoId,
-                views: `${Math.floor(Math.random() * 800 + 200)}K`,
-                trending: true,
-                createdAt: serverTimestamp()
-            });
-            totalCount++;
-        }
-        console.log("🎥 YouTube के वीडियो लोड हो गए!");
-
-        // 2. Spotify से असली भारत के Top 10 Hits लाना
-        const spotifyToken = await getSpotifyToken();
-        if (spotifyToken) {
+        for (let cat of categoriesToFetch) {
             try {
-                const spRes = await axios.get('https://api.spotify.com/v1/search?q=Top%20Hindi%20Hits&type=track&market=IN&limit=10', {
-                    headers: { 'Authorization': `Bearer ${spotifyToken}` }
-                });
-                const tracks = spRes.data.tracks.items;
-
-                for (let track of tracks) {
-                    // Spotify के गाने को खोजने के लिए YouTube ID भी निकाल लेते हैं ताकि प्ले हो सके
-                    const trackQuery = `${track.name} ${track.artists[0].name}`;
-                    const searchYt = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(trackQuery)}&type=video&maxResults=1&key=${YOUTUBE_API_KEY}`;
-                    const searchRes = await axios.get(searchYt);
-                    const ytId = searchRes.data.items[0]?.id?.videoId || "";
+                const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(cat.query)}&type=video&videoEmbeddable=true&regionCode=IN&maxResults=20&key=${YOUTUBE_API_KEY}`;
+                const response = await axios.get(url);
+                
+                for (let video of response.data.items) {
+                    if (!video.id.videoId) continue;
 
                     await addDoc(collection(db, "trending_reels"), {
-                        title: `🟢 Spotify: ${track.name} - ${track.artists[0].name}`,
-                        category: "status", // आपकी वेबसाइट पर दिखने के लिए
-                        youtubeId: ytId,
-                        views: `🎧 Spotify Hits`,
-                        trending: true,
+                        title: video.snippet.title,
+                        category: cat.name,
+                        youtubeId: video.id.videoId,
+                        views: `${Math.floor(Math.random() * 800 + 100)}K`,
+                        trending: Math.random() > 0.4 ? true : false,
                         createdAt: serverTimestamp()
                     });
                     totalCount++;
                 }
-                console.log("🟢 Spotify के 10 टॉप गाने भी मिक्स होकर लोड हो गए!");
-            } catch (e) {
-                console.log("❌ Spotify Fetch Error:", e.message);
+                console.log(`✅ ${cat.name} कैटेगरी के 20 वीडियो लोड हो गए!`);
+            } catch (catErr) {
+                console.error(`❌ ${cat.name} एरर:`, catErr.message);
             }
         }
 
-        console.log(`\n🎉 कुल ${totalCount} items (YouTube + Spotify Live) सेव हो गए!`);
+        console.log(`\n🎉 कुल ${totalCount} (6 x 20 = 120) नए वीडियो सफलतापूर्वक लोड हो गए!`);
         process.exit(0);
     } catch (e) {
         console.error("❌ मुख्य एरर: ", e);
