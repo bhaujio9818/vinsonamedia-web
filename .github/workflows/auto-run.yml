@@ -1,28 +1,28 @@
-name: Vinsona Media Auto Scraper
+name: Daily Auto Scraper Run
 
 on:
   schedule:
-    # यह रोज़ सुबह भारतीय समयानुसार (IST) 6:30 बजे अपने आप रन होगा
-    - cron: '0 1 * * *'
-  workflow_dispatch: # इससे आप जब चाहें हाथ से भी रन कर सकते हैं
+    # ⏰ हर रोज़ रात 12 बजे (UTC) / सुबह 5:30 बजे (IST) अपने-आप चलेगा
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 👈 इससे आप जब चाहें Actions टैब से मैन्युअली (Manual Run) भी चला सकते हैं
 
 jobs:
   run-scraper:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository code
-      uses: actions/checkout@v4
+      - name: 📥 Checkout Repository Code
+        uses: actions/checkout@v3
 
-    - name: Setup Node.js environment
-      uses: actions/checkout@v4
-      with:
-        node-version: '20'
+      - name: 🟢 Setup Node.js Environment
+        uses: actions/checkout@v3
+        with:
+          node-version: '18'
 
-    - name: Install Project Dependencies (Firebase & Axios)
-      run: |
-        npm init -y
-        npm install firebase axios
+      - name: 📦 Install Required Dependencies
+        run: |
+          npm install firebase axios
 
-    - name: Run Secret Scraper Script
-      run: node scraper.js
+      - name: 🚀 Run Multi-Category Scraper Script
+        run: |
+          node scraper.js
