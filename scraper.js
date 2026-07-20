@@ -14,7 +14,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 🔑 Keys
+// 🔑 API Keys
 const YOUTUBE_API_KEY = "AIzaSyAjbt-L3NLaRi_0ZFwwI6-7xu3-nTkWkY0";
 const SPOTIFY_CLIENT_ID = "a81c543806b24ed89f65cf92b3f70fd2";
 const SPOTIFY_CLIENT_SECRET = "76290b018beb48629ef47fd8f379c684";
@@ -55,48 +55,59 @@ async function startAutoScraper() {
     try {
         await deleteOldData();
         console.log("🚀 AI Trend Engine चालू हो रहा है...");
+        let totalCount = 0;
 
-        let searchTerms = ["Hindi Trending Songs Status", "Viral Instagram Reel Songs"];
+        // 1. YouTube के लाइव ट्रेंडिंग वीडियो लोड करना
+        const ytUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=Hindi%20Trending%20Status%20Song&type=video&videoEmbeddable=true&regionCode=IN&maxResults=10&key=${YOUTUBE_API_KEY}`;
+        const ytRes = await axios.get(ytUrl);
 
-        // 1. Spotify से भारत के टॉप ट्रेंडिंग गाने निकालना
+        for (let video of ytRes.data.items) {
+            if (!video.id.videoId) continue;
+            await addDoc(collection(db, "trending_reels"), {
+                title: video.snippet.title,
+                category: "status",
+                youtubeId: video.id.videoId,
+                views: `${Math.floor(Math.random() * 800 + 200)}K`,
+                trending: true,
+                createdAt: serverTimestamp()
+            });
+            totalCount++;
+        }
+        console.log("🎥 YouTube के वीडियो लोड हो गए!");
+
+        // 2. Spotify से असली भारत के Top 10 Hits लाना
         const spotifyToken = await getSpotifyToken();
         if (spotifyToken) {
             try {
-                const spRes = await axios.get('https://api.spotify.com/v1/search?q=Top%20Hindi%20Hits&type=track&market=IN&limit=5', {
+                const spRes = await axios.get('https://api.spotify.com/v1/search?q=Top%20Hindi%20Hits&type=track&market=IN&limit=10', {
                     headers: { 'Authorization': `Bearer ${spotifyToken}` }
                 });
-                const spotifyTracks = spRes.data.tracks.items.map(t => `${t.name} ${t.artists[0].name}`);
-                if (spotifyTracks.length > 0) {
-                    searchTerms = spotifyTracks;
-                    console.log("🎵 Spotify के टॉप गानों की लिस्ट मिल गई है!");
+                const tracks = spRes.data.tracks.items;
+
+                for (let track of tracks) {
+                    // Spotify के गाने को खोजने के लिए YouTube ID भी निकाल लेते हैं ताकि प्ले हो सके
+                    const trackQuery = `${track.name} ${track.artists[0].name}`;
+                    const searchYt = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(trackQuery)}&type=video&maxResults=1&key=${YOUTUBE_API_KEY}`;
+                    const searchRes = await axios.get(searchYt);
+                    const ytId = searchRes.data.items[0]?.id?.videoId || "";
+
+                    await addDoc(collection(db, "trending_reels"), {
+                        title: `🟢 Spotify: ${track.name} - ${track.artists[0].name}`,
+                        category: "status", // आपकी वेबसाइट पर दिखने के लिए
+                        youtubeId: ytId,
+                        views: `🎧 Spotify Hits`,
+                        trending: true,
+                        createdAt: serverTimestamp()
+                    });
+                    totalCount++;
                 }
+                console.log("🟢 Spotify के 10 टॉप गाने भी मिक्स होकर लोड हो गए!");
             } catch (e) {
-                console.log("Spotify fallback active.");
+                console.log("❌ Spotify Fetch Error:", e.message);
             }
         }
 
-        let count = 0;
-        // 2. ट्रेंडिंग गानों का वीडियो डेटाबेस में सेव करना
-        for (let term of searchTerms) {
-            const ytUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(term)}&type=video&videoEmbeddable=true&regionCode=IN&maxResults=3&key=${YOUTUBE_API_KEY}`;
-            const ytRes = await axios.get(ytUrl);
-
-            for (let video of ytRes.data.items) {
-                if (!video.id.videoId) continue;
-
-                await addDoc(collection(db, "trending_reels"), {
-                    title: video.snippet.title,
-                    category: "status",
-                    youtubeId: video.id.videoId,
-                    views: `${Math.floor(Math.random() * 800 + 200)}K`,
-                    trending: true,
-                    createdAt: serverTimestamp()
-                });
-                count++;
-            }
-        }
-
-        console.log(`\n🎉 सफलता! कुल ${count} वीडियो और गाने वेबसाइट पर लाइव लोड हो गए!`);
+        console.log(`\n🎉 कुल ${totalCount} items (YouTube + Spotify Live) सेव हो गए!`);
         process.exit(0);
     } catch (e) {
         console.error("❌ मुख्य एरर: ", e);
