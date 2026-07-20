@@ -7,7 +7,7 @@
     --accent-color: #ff3366;
     --accent-hover: #ff1a53;
     --border-color: rgba(255, 255, 255, 0.08);
-    --header-bg: rgba(26, 26, 36, 0.85);
+    --header-bg: #16161f;
     --modal-bg: rgba(15, 15, 18, 0.95);
 }
 
@@ -19,7 +19,7 @@
     --accent-color: #ff3366;
     --accent-hover: #e60039;
     --border-color: rgba(0, 0, 0, 0.08);
-    --header-bg: rgba(255, 255, 255, 0.9);
+    --header-bg: #ffffff;
     --modal-bg: rgba(255, 255, 255, 0.95);
 }
 
@@ -53,22 +53,22 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* 🚀 Header & Navigation */
+/* 🚀 Header & Navigation (Fixed Overlap Bug) */
 header {
     background: var(--header-bg);
-    backdrop-filter: blur(10px);
     padding: 30px 20px 20px;
     text-align: center;
     border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: relative; /* 👈 Sticky हटाया गया ताकि Overlap खत्म हो */
+    width: 100%;
+    margin-bottom: 25px;
 }
 
 header h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: var(--accent-color);
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: 700;
 }
 
 header p {
@@ -102,7 +102,7 @@ header p {
     justify-content: center;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .cat-btn, .tag-filter-btn {
@@ -129,14 +129,14 @@ header p {
     margin-top: 10px;
 }
 
-/* 🎬 Video Grid Container */
+/* 🎬 Video Grid Container (Clean Clean Layout) */
 main {
     max-width: 1200px;
-    margin: 25px auto;
+    margin: 0 auto;
     padding: 0 15px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
+    gap: 22px;
 }
 
 .card {
@@ -171,7 +171,7 @@ main {
 /* 🔄 Load More Button */
 .load-more-container {
     text-align: center;
-    margin: 30px 0;
+    margin: 35px 0;
 }
 
 .load-more-btn {
