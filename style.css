@@ -9,7 +9,7 @@
     --border-color: rgba(255, 255, 255, 0.08);
     --header-bg: #16161f;
     --modal-bg: rgba(15, 15, 18, 0.95);
-    --card-title-color: #ffffff; /* 🌙 Dark Mode में सफ़ेद टाइटल */
+    --card-title-color: #ffffff; /* 🌙 Dark Mode में सफ़ेद टाइटल */
 }
 
 /* ☀️ Light Mode Fixes */
@@ -200,6 +200,92 @@ main {
 
 .load-more-btn:hover {
     background: var(--accent-hover);
+}
+
+/* 📖 SEO Article Section Styling */
+.seo-articles-container {
+    max-width: 1200px;
+    margin: 40px auto 20px;
+    padding: 0 15px;
+}
+
+.article-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.article-card h2 {
+    font-size: 1.4rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.article-card p {
+    color: var(--text-color);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.mini-blog {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.mini-blog h3 {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 8px;
+}
+
+.mini-blog p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* ❓ FAQ Section Styling */
+.faq-section {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.faq-section h2 {
+    font-size: 1.4rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.faq-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+}
+
+.faq-item h3 {
+    font-size: 1.05rem;
+    color: var(--text-color);
+    margin-bottom: 6px;
+}
+
+.faq-item p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 
 /* 🎥 Modal & Popups */
