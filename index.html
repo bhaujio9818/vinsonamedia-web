@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vinsona Media - Premium Status & Tones</title>
+    <title>Vinsona Media - Premium Shorts & Status Videos</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,31 +11,24 @@
 
     <header>
         <h1>🔥 Vinsona Media</h1>
-        <p>प्रीमियम रील्स वीडियो और रिंगटोन्स एक क्लिक में डाउनलोड करें</p>
+        <p>ट्रेंडिंग शॉर्ट्स, रील्स और वायरल वीडियो स्टेटस एक जगह देखें</p>
         <div class="search-box">
-            <input type="text" id="search-input" placeholder="यहाँ रिंगटोन या वीडियो का नाम खोजें...">
+            <input type="text" id="search-input" placeholder="यहाँ वीडियो या सांग खोजें...">
         </div>
         <div class="category-container">
             <button class="cat-btn active" data-category="all">⚡ सब कुछ</button>
-            <button class="cat-btn" data-category="ringtone">🎵 रिंगटोन</button>
+            <button class="cat-btn" data-category="shorts">🎬 शॉर्ट वीडियो</button>
             <button class="cat-btn" data-category="status">🎥 वीडियो स्टेटस</button>
-            <button class="cat-btn" data-category="gaming">🎮 गेमिंग स्पेशल</button>
+            <button class="cat-btn" data-category="motivation">🔥 मोटिवेशनल</button>
+            <button class="cat-btn" data-category="sad">💔 सैड शॉर्ट्स</button>
+            <button class="cat-btn" data-category="romantic">❤️ रोमांटिक वीडियो</button>
+            <button class="cat-btn" data-category="fullsong">🎵 फुल वीडियो सांग</button>
         </div>
         <div class="tag-filter-container">
             <button class="tag-filter-btn" id="filter-trending">🔥 हॉट ट्रेंडिंग</button>
             <button class="tag-filter-btn" id="filter-all-tags">✨ सब दिखाएं</button>
         </div>
     </header>
-
-    <!-- 🎵 Spotify Live Auto-Updating Player Section -->
-    <section style="max-width: 1000px; margin: 25px auto 10px auto; padding: 0 15px;">
-        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(29, 185, 84, 0.3); border-radius: 16px; padding: 15px; backdrop-filter: blur(8px);">
-            <h3 style="color: #1DB954; font-family: sans-serif; display: flex; align-items: center; gap: 8px; margin-top: 0; margin-bottom: 12px; font-size: 18px;">
-                <span>🟢</span> Spotify Hot Hits India (Live)
-            </h3>
-            <iframe style="border-radius:12px; width:100%; border:0;" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX0XUfTFm3M3B?utm_source=generator&theme=0" height="352" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        </div>
-    </section>
 
     <main id="content-container">
         <div class="shimmer-card"></div>
@@ -46,6 +39,7 @@
         <button id="loadMoreBtn" class="load-more-btn">🔄 और दिखाएं (Load More)</button>
     </div>
 
+    <!-- 🎥 Video Popup Modal (AdSense Safe) -->
     <div id="video-popup-modal" class="modal hidden">
         <div class="modal-content video-modal-content">
             <span class="close-modal" id="close-video-modal">&times;</span>
@@ -59,35 +53,30 @@
                     <span id="popup-video-views">👁️ 0 व्यूज</span>
                 </div>
                 <div class="popup-actions">
-                    <button id="popup-download-btn" class="download-btn">📥 Video Download</button>
+                    <button id="popup-download-btn" class="download-btn">▶️ Watch Full Video</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- ⏳ Timer Modal -->
     <div id="download-modal" class="modal hidden">
         <div class="modal-content">
-            <h3>आपकी फ़ाइल तैयार हो रही है... 🚀</h3>
+            <h3>वीडियो लोडिंग चालू है... 🚀</h3>
             <div id="timer-number" class="timer-countdown">3</div>
-            <p style="font-size: 12px; color: #aaa;">विज्ञापन आपके डाउनलोड को फ्री रखने में मदद करते हैं</p>
+            <p style="font-size: 12px; color: #aaa;">मुफ़्त कंटेंट का आनंद लेने के लिए बने रहें</p>
         </div>
     </div>
 
-    <div id="exit-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2>Rukिए, गुलाब भाई! 👋</h2>
-            <p>जाने से पहले आज की सबसे हॉट और वायरल रिंगटोन को डाउनलोड करना न भूलें!</p>
-            <button onclick="closeExitModal()" class="download-btn audio-btn" style="max-width: 200px; margin: 10px auto;">🔥 बेस्ट टोन देखें</button>
-        </div>
-    </div>
-
+    <!-- 🍪 Cookie Notice -->
     <div id="cookie-notice" class="cookie-bar">
-        <p>हम आपकी पसंद को याद रखने और बेहतर अनुभव के लिए कुकीज़ (Cookies) का उपयोग करते हैं। 
+        <p>हम आपकी पसंद को याद रखने और बेहतर अनुभव के लिए कुकीज़ का उपयोग करते हैं। 
            <a href="#privacy" onclick="showLegalPage('privacy')">पॉलिसी पढ़ें</a>
         </p>
         <button onclick="acceptCookies()" class="cookie-btn">Accept</button>
     </div>
 
+    <!-- 📌 Footer -->
     <footer>
         <div class="footer-links">
             <a href="#privacy" onclick="showLegalPage('privacy')">Privacy Policy</a> | 
@@ -95,10 +84,11 @@
             <a href="#dmca" onclick="showLegalPage('dmca')">DMCA / Copyright</a> | 
             <a href="mailto:vinsona9818@gmail.com">Contact Us</a>
         </div>
-        <p class="disclaimer"><strong>डिस्क्लेमर (Disclaimer):</strong> Vinsona Media एक प्रमोशनल प्लेटफॉर्म है।</p>
+        <p class="disclaimer"><strong>डिस्क्लेमर (Disclaimer):</strong> Vinsona Media एक प्रमोशनल और एंटरटेनमेंट प्लेटफॉर्म है।</p>
         <p class="copyright">&copy; 2026 Vinsona Media. All Rights Reserved.</p>
     </footer>
 
+    <!-- 📜 Legal Pages Modal -->
     <div id="legal-modal" class="modal hidden">
         <div class="modal-content legal-content">
             <span class="close-modal" onclick="closeLegalPage()">&times;</span>
