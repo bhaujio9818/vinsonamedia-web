@@ -1,17 +1,18 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 🔥 Firebase & Google API Configuration
-const API_KEY = "AIzaSyDRxDMwj1yU-gfVl3z3MYe7QfB3U_EvXS8";
-
+// 🔑 1. Firebase Configuration
 const firebaseConfig = {
-  apiKey: API_KEY,
+  apiKey: "AIzaSyDRxDMwj1yU-gfVl3z3MYe7QfB3U_EvXS8",
   authDomain: "vinsona-media.firebaseapp.com",
   projectId: "vinsona-media",
   storageBucket: "vinsona-media.firebasestorage.app",
   messagingSenderId: "858167007545",
   appId: "1:858167007545:web:0cec92359af21fb2cbf0e8"
 };
+
+// 🔑 2. YouTube Data API Key 2 (आपकी नई YouTube Key)
+const YOUTUBE_API_KEY = "AIzaSyAjbt-L3NLaRi_0ZFwwI6-7xu3-nTkWkY0"; 
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -49,7 +50,7 @@ async function fetchVideos() {
     }
 }
 
-// 🎯 Render Video Cards (Fixed Theme Color Issue for Light Mode)
+// 🎯 Render Video Cards
 function renderCards(videosToRender) {
     const container = document.getElementById("content-container");
     if (!container) return;
@@ -89,10 +90,10 @@ function renderCards(videosToRender) {
 // 🔍 Filter & Live YouTube Search Logic
 function applyFilters() {
     if (currentSearch.length > 2) {
-        // अगर यूजर ने सर्च में कुछ टाइप किया है तो पहले फ़ायरबेस में देखो
+        // 1. पहले फ़ायरबेस डेटाबेस में खोजो
         filteredVideos = allVideos.filter(video => video.title.toLowerCase().includes(currentSearch.toLowerCase()));
         
-        // अगर फ़ायरबेस में गाना नहीं मिला, तो डायरेक्ट यूट्यूब से लाइव सर्च करो
+        // 2. अगर फ़ायरबेस में नहीं मिला तो डायरेक्ट YouTube से लाइव सर्च करो!
         if (filteredVideos.length === 0) {
             searchYouTubeLive(currentSearch);
             return;
@@ -109,13 +110,13 @@ function applyFilters() {
     renderCards(filteredVideos);
 }
 
-// 🌐 Live Search from YouTube Data API
+// 🌐 Live Search from YouTube Data API v3
 async function searchYouTubeLive(searchTerm) {
     const container = document.getElementById("content-container");
     if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">YouTube से लाइव गानें खोजे जा रहे हैं... 🔍</p>`;
 
     try {
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&type=video&key=${API_KEY}`;
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&type=video&key=${YOUTUBE_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -135,7 +136,7 @@ async function searchYouTubeLive(searchTerm) {
         }
     } catch (err) {
         console.error("YouTube Live Search Error:", err);
-        renderCards([]);
+        if (container) container.innerHTML = `<p style="text-align:center; color:#ff4d4d; grid-column: 1/-1; padding: 40px 0;">लाइव सर्च में समस्या आई।</p>`;
     }
 }
 
@@ -159,7 +160,7 @@ function setupEventListeners() {
             currentSearch = e.target.value.trim();
             searchDebounce = setTimeout(() => {
                 applyFilters();
-            }, 500);
+            }, 600);
         });
     }
 
@@ -250,7 +251,7 @@ function closePopup() {
     if (modal) modal.classList.add("hidden");
 }
 
-// 🛡️ AdSense Safe - Watch Full Video Timer Handler
+// 🛡️ Watch Full Video Timer Handler
 window.triggerTimer = function(youtubeId) {
     if (!youtubeId) return;
     
@@ -268,7 +269,6 @@ window.triggerTimer = function(youtubeId) {
             clearInterval(countdown);
             if (downloadModal) downloadModal.classList.add("hidden");
             
-            // 🎬 Direct Official YouTube Video Player View
             window.open(`https://www.youtube.com/watch?v=${youtubeId}`, '_blank');
         }
     }, 1000);
@@ -286,7 +286,7 @@ const legalData = {
     `,
     dmca: `
         <h2>DMCA / Copyright Policy</h2>
-        <p>Vinsona Media सभी कॉपीराइट नियमों का सम्मान करता है। यदि आप किसी सामग्री के वैध मालिक हैं और उसे हटवाना चाहते हैं, तो कृपया vinsona9818@gmail.com पर संपर्क करें। हम 24-48 घंटों में इसे हटा देंगे।</p>
+        <p>Vinsona Media सभी कॉपीराइट नियमों का सम्मान करता है। यदि आप किसी सामग्री के वैध मालिक हैं और उसे साइट से हटवाना चाहते हैं, तो कृपया vinsona9818@gmail.com पर संपर्क करें। हम 24-48 घंटों में इसे हटा देंगे।</p>
     `
 };
 
