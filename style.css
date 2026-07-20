@@ -1,395 +1,339 @@
-/* 🎨 Vinsona Media - Premium Dark Theme Stylesheet */
-
+/* 🎨 Global Theme & Variable Settings */
 :root {
-    --bg-color: #0d0e12;
-    --card-bg: #161820;
-    --text-color: #ffffff;
-    --text-muted: #8a8d98;
-    --primary-gradient: linear-gradient(135deg, #ff416c, #ff4b2b);
-    --secondary-gradient: linear-gradient(135deg, #11998e, #38ef7d);
-    --border-color: #242736;
-    --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    --bg-color: #0f0f12;
+    --card-bg: #1a1a24;
+    --text-color: #f1f1f5;
+    --text-muted: #a0a0b0;
+    --accent-color: #ff3366;
+    --accent-hover: #ff1a53;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --header-bg: rgba(26, 26, 36, 0.85);
+    --modal-bg: rgba(15, 15, 18, 0.95);
 }
 
 [data-theme="light"] {
-    --bg-color: #f4f6f9;
+    --bg-color: #f4f5f9;
     --card-bg: #ffffff;
-    --text-color: #1a1d24;
-    --text-muted: #606470;
-    --border-color: #e1e4ed;
-    --shadow: 0 8px 24px rgba(149, 157, 165, 0.15);
+    --text-color: #1a1a24;
+    --text-muted: #666677;
+    --accent-color: #ff3366;
+    --accent-hover: #e60039;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --header-bg: rgba(255, 255, 255, 0.9);
+    --modal-bg: rgba(255, 255, 255, 0.95);
 }
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: background 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    padding-bottom: 60px;
+    padding-bottom: 40px;
 }
 
-/* 🌓 Theme Toggle Button */
+/* 🌓 Theme Switcher */
 .theme-switch {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 100;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
     background: var(--card-bg);
     color: var(--text-color);
     border: 1px solid var(--border-color);
-    padding: 10px 16px;
-    border-radius: 30px;
+    padding: 8px 16px;
+    border-radius: 20px;
     cursor: pointer;
     font-weight: 600;
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* 🚀 Header Design */
+/* 🚀 Header & Navigation */
 header {
+    background: var(--header-bg);
+    backdrop-filter: blur(10px);
+    padding: 30px 20px 20px;
     text-align: center;
-    padding: 60px 20px 30px 20px;
-    background: radial-gradient(circle at top, rgba(255, 65, 108, 0.1), transparent);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 header h1 {
-    font-size: 2.8rem;
-    font-weight: 800;
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 5px;
 }
 
 header p {
     color: var(--text-muted);
-    font-size: 1.1rem;
-    margin-bottom: 30px;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
 }
 
-/* 🔍 Search Box */
 .search-box {
-    max-width: 600px;
-    margin: 0 auto 30px auto;
+    max-width: 500px;
+    margin: 0 auto 15px;
 }
 
 .search-box input {
     width: 100%;
-    padding: 16px 24px;
-    background-color: var(--card-bg);
+    padding: 12px 20px;
+    border-radius: 25px;
     border: 1px solid var(--border-color);
-    border-radius: 50px;
+    background: var(--card-bg);
     color: var(--text-color);
-    font-size: 1rem;
+    font-size: 0.95rem;
     outline: none;
-    box-shadow: var(--shadow);
 }
 
 .search-box input:focus {
-    border-color: #ff416c;
+    border-color: var(--accent-color);
 }
 
-/* 🏷️ Categories & Filters */
-.category-container, .tag-filter-container {
+.category-container {
     display: flex;
     justify-content: center;
-    gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 20px;
-}
-
-.cat-btn, .tag-filter-btn {
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.cat-btn.active, .cat-btn:hover {
-    background: var(--primary-gradient);
-    color: #fff;
-    border: none;
-}
-
-.tag-filter-btn {
-    background: none;
-    border-color: #ff416c;
-    color: #ff416c;
-}
-
-#filter-trending {
-    background-color: rgba(255, 65, 108, 0.1);
-}
-
-/* 🖥️ PC & LAPTOP GRID SYSTEM (Main Magic 🌟) */
-main {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-    display: grid;
-    /* मोबाइल में 1 कॉलम, टैबलेट में 2 और PC पर अपने आप 3 या 4 कॉलम बनाएगा */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
-}
-
-/* 🗂️ Premium Card Style */
-.card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 20px;
-    position: relative;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.trending-badge {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: var(--primary-gradient);
-    color: white;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
-    z-index: 5;
-}
-
-.fav-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 5;
-}
-
-.fav-btn.active {
-    color: #ff416c;
-}
-
-.card h3 {
-    font-size: 1.2rem;
-    margin: 15px 0 8px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.star-rating {
-    color: #ffcc00;
-    font-size: 12px;
+    gap: 8px;
     margin-bottom: 10px;
 }
 
-.card-stats {
+.cat-btn, .tag-filter-btn {
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.cat-btn.active, .cat-btn:hover, .tag-filter-btn:hover {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+.tag-filter-container {
     display: flex;
-    justify-content: space-between;
-    color: var(--text-muted);
-    font-size: 12px;
-    margin-bottom: 15px;
-}
-
-/* 🎬 Video Preview Window */
-.video-preview-box {
-    position: relative;
-    transition: transform 0.2s;
-}
-
-.video-preview-box:hover {
-    transform: scale(1.02);
-}
-
-/* 🔘 VIP Alignment Buttons (Video Left, MP3 Right) */
-.button-group {
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     gap: 10px;
     margin-top: 10px;
 }
 
-.row-btns {
-    display: flex;
-    gap: 10px;
+/* 🎬 Video Grid Container */
+main {
+    max-width: 1200px;
+    margin: 25px auto;
+    padding: 0 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
 }
 
-.download-btn {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
     cursor: pointer;
-    text-align: center;
-    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.video-btn {
-    background: var(--primary-gradient);
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(255, 51, 102, 0.2);
 }
 
-.audio-btn {
-    background: var(--secondary-gradient);
+/* 🔄 Shimmer Skeleton Loading */
+.shimmer-card {
+    height: 220px;
+    background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 12px;
 }
 
-.whatsapp-btn {
-    display: block;
-    width: 100%;
-    background-color: #25d366;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
 }
 
 /* 🔄 Load More Button */
 .load-more-container {
     text-align: center;
-    margin: 40px 0;
+    margin: 30px 0;
 }
 
 .load-more-btn {
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    padding: 14px 35px;
-    border-radius: 30px;
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
 }
 
-/* 🎥 Video Theatre Modal */
+.load-more-btn:hover {
+    background: var(--accent-hover);
+}
+
+/* 🎥 Modal & Popups */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 2000;
+    padding: 15px;
 }
 
-.hidden { display: none !important; }
+.modal.hidden {
+    display: none;
+}
 
 .modal-content {
-    background-color: var(--card-bg);
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
-    padding: 30px;
     border-radius: 16px;
-    text-align: center;
-    max-width: 450px;
-    width: 90%;
-    position: relative;
-    box-shadow: var(--shadow);
-}
-
-.video-modal-content {
-    max-width: 600px;
     padding: 20px;
-}
-
-.video-player-wrapper {
-    background: #000;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 15px;
+    max-width: 600px;
+    width: 100%;
+    position: relative;
+    text-align: center;
 }
 
 .close-modal {
     position: absolute;
     top: 10px;
     right: 15px;
-    color: var(--text-color);
     font-size: 28px;
+    color: var(--text-muted);
     cursor: pointer;
 }
 
-.timer-countdown {
-    font-size: 4rem;
-    font-weight: 800;
-    color: #ff416c;
-    margin: 20px 0;
+.close-modal:hover {
+    color: var(--accent-color);
 }
 
-/* 🍪 Cookie Consent Bar */
+.download-btn {
+    background: #10b981;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.download-btn:hover {
+    background: #059669;
+}
+
+.timer-countdown {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    margin: 15px 0;
+}
+
+/* 🍪 Cookie Notice Bar */
 .cookie-bar {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: var(--card-bg);
+    background: var(--card-bg);
     border-top: 1px solid var(--border-color);
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 999;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+    z-index: 1500;
+}
+
+.cookie-bar p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.cookie-bar a {
+    color: var(--accent-color);
 }
 
 .cookie-btn {
-    background: var(--primary-gradient);
-    color: white;
+    background: var(--accent-color);
+    color: #fff;
     border: none;
-    padding: 8px 20px;
-    border-radius: 6px;
+    padding: 6px 16px;
+    border-radius: 15px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: bold;
 }
 
-/* 📄 Footer Styling */
+/* 📌 Footer */
 footer {
     text-align: center;
-    padding: 40px 20px;
+    padding: 30px 20px;
+    background: var(--card-bg);
     border-top: 1px solid var(--border-color);
-    margin-top: 50px;
-    color: var(--text-muted);
-    font-size: 14px;
+    margin-top: 40px;
+}
+
+.footer-links {
+    margin-bottom: 12px;
 }
 
 .footer-links a {
-    color: var(--text-color);
+    color: var(--text-muted);
     text-decoration: none;
-    margin: 0 10px;
+    font-size: 0.85rem;
+    margin: 0 5px;
 }
 
-.disclaimer {
-    margin: 15px auto;
-    max-width: 800px;
-    font-size: 12px;
+.footer-links a:hover {
+    color: var(--accent-color);
 }
 
-/* ⏳ Shimmer Loading Effect */
-.shimmer-card {
-    height: 380px;
-    background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
-    background-size: 200% 100%;
-    animation: loadingShimmer 1.5s infinite;
-    border-radius: 16px;
+.disclaimer, .copyright {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 6px;
 }
 
-@keyframes loadingShimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+/* ⬆️ Scroll Top Button */
+#scrollTopBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    z-index: 1000;
+    font-size: 16px;
 }
