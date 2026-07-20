@@ -1,9 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 🔥 Firebase Configuration
+// 🔥 Firebase & Google API Configuration
+const API_KEY = "AIzaSyDRxDMwj1yU-gfVl3z3MYe7QfB3U_EvXS8";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDRxDMwj1yU-gfVl3z3MYe7QfB3U_EvXS8",
+  apiKey: API_KEY,
   authDomain: "vinsona-media.firebaseapp.com",
   projectId: "vinsona-media",
   storageBucket: "vinsona-media.firebasestorage.app",
@@ -20,6 +22,7 @@ let currentCategory = "all";
 let currentSearch = "";
 let isTrendingOnly = false;
 let displayedCount = 12;
+let searchDebounce = null;
 
 // 🚀 Page Initializer
 document.addEventListener("DOMContentLoaded", () => {
@@ -83,17 +86,57 @@ function renderCards(videosToRender) {
     }
 }
 
-// 🔍 Filter & Search Logic
+// 🔍 Filter & Live YouTube Search Logic
 function applyFilters() {
-    filteredVideos = allVideos.filter(video => {
-        const matchesCategory = (currentCategory === "all") || (video.category === currentCategory);
-        const matchesSearch = video.title.toLowerCase().includes(currentSearch.toLowerCase());
-        const matchesTrending = isTrendingOnly ? video.trending === true : true;
-        return matchesCategory && matchesSearch && matchesTrending;
-    });
+    if (currentSearch.length > 2) {
+        // अगर यूजर ने सर्च में कुछ टाइप किया है तो पहले फ़ायरबेस में देखो
+        filteredVideos = allVideos.filter(video => video.title.toLowerCase().includes(currentSearch.toLowerCase()));
+        
+        // अगर फ़ायरबेस में गाना नहीं मिला, तो डायरेक्ट यूट्यूब से लाइव सर्च करो
+        if (filteredVideos.length === 0) {
+            searchYouTubeLive(currentSearch);
+            return;
+        }
+    } else {
+        filteredVideos = allVideos.filter(video => {
+            const matchesCategory = (currentCategory === "all") || (video.category === currentCategory);
+            const matchesTrending = isTrendingOnly ? video.trending === true : true;
+            return matchesCategory && matchesTrending;
+        });
+    }
 
     displayedCount = 12;
     renderCards(filteredVideos);
+}
+
+// 🌐 Live Search from YouTube Data API
+async function searchYouTubeLive(searchTerm) {
+    const container = document.getElementById("content-container");
+    if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">YouTube से लाइव गानें खोजे जा रहे हैं... 🔍</p>`;
+
+    try {
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&type=video&key=${API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.items && data.items.length > 0) {
+            filteredVideos = data.items.map(item => ({
+                id: item.id.videoId,
+                youtubeId: item.id.videoId,
+                title: item.snippet.title,
+                category: "search",
+                views: "LIVE",
+                trending: false
+            }));
+            displayedCount = 12;
+            renderCards(filteredVideos);
+        } else {
+            if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">कोई वीडियो नहीं मिला! 🔍</p>`;
+        }
+    } catch (err) {
+        console.error("YouTube Live Search Error:", err);
+        renderCards([]);
+    }
 }
 
 // ⚙️ Setup Event Listeners
@@ -108,12 +151,15 @@ function setupEventListeners() {
         });
     });
 
-    // Search Box
+    // Search Box with Debounce
     const searchInput = document.getElementById("search-input");
     if (searchInput) {
         searchInput.addEventListener("input", (e) => {
+            clearTimeout(searchDebounce);
             currentSearch = e.target.value.trim();
-            applyFilters();
+            searchDebounce = setTimeout(() => {
+                applyFilters();
+            }, 500);
         });
     }
 
@@ -240,7 +286,7 @@ const legalData = {
     `,
     dmca: `
         <h2>DMCA / Copyright Policy</h2>
-        <p>Vinsona Media सभी कॉपीराइट नियमों का सम्मान करता है। यदि आप किसी सामग्री के वैध मालिक हैं और उसे साइट से हटवाना चाहते हैं, तो कृपया vinsona9818@gmail.com पर संपर्क करें। हम 24-48 घंटों में इसे हटा देंगे।</p>
+        <p>Vinsona Media सभी कॉपीराइट नियमों का सम्मान करता है। यदि आप किसी सामग्री के वैध मालिक हैं और उसे हटवाना चाहते हैं, तो कृपया vinsona9818@gmail.com पर संपर्क करें। हम 24-48 घंटों में इसे हटा देंगे।</p>
     `
 };
 
