@@ -9,18 +9,21 @@
     --border-color: rgba(255, 255, 255, 0.08);
     --header-bg: #16161f;
     --modal-bg: rgba(15, 15, 18, 0.95);
+    --card-title-color: #ffffff; /* 🌙 Dark Mode में सफ़ेद टाइटल */
 }
 
+/* ☀️ Light Mode Fixes */
 [data-theme="light"] {
     --bg-color: #f4f5f9;
     --card-bg: #ffffff;
     --text-color: #1a1a24;
-    --text-muted: #666677;
+    --text-muted: #555566;
     --accent-color: #ff3366;
     --accent-hover: #e60039;
-    --border-color: rgba(0, 0, 0, 0.08);
+    --border-color: rgba(0, 0, 0, 0.1);
     --header-bg: #ffffff;
     --modal-bg: rgba(255, 255, 255, 0.95);
+    --card-title-color: #111111; /* ☀️ Light Mode में डार्क/काला टाइटल */
 }
 
 * {
@@ -50,16 +53,16 @@ body {
     border-radius: 20px;
     cursor: pointer;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* 🚀 Header & Navigation (Fixed Overlap Bug) */
+/* 🚀 Header & Navigation */
 header {
     background: var(--header-bg);
     padding: 30px 20px 20px;
     text-align: center;
     border-bottom: 1px solid var(--border-color);
-    position: relative; /* 👈 Sticky हटाया गया ताकि Overlap खत्म हो */
+    position: relative;
     width: 100%;
     margin-bottom: 25px;
 }
@@ -129,7 +132,7 @@ header p {
     margin-top: 10px;
 }
 
-/* 🎬 Video Grid Container (Clean Clean Layout) */
+/* 🎬 Video Grid Container */
 main {
     max-width: 1200px;
     margin: 0 auto;
@@ -145,13 +148,22 @@ main {
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(255, 51, 102, 0.2);
+}
+
+/* 📌 Card Title Color Fix (For Light & Dark Theme) */
+.card-info h4 {
+    color: var(--card-title-color) !important;
+}
+
+.card-info span {
+    color: var(--text-muted);
 }
 
 /* 🔄 Shimmer Skeleton Loading */
@@ -211,6 +223,7 @@ main {
 
 .modal-content {
     background: var(--card-bg);
+    color: var(--text-color);
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 20px;
