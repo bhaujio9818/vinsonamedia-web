@@ -11,7 +11,7 @@ const firebaseConfig = {
   appId: "1:858167007545:web:0cec92359af21fb2cbf0e8"
 };
 
-// 🔑 2. YouTube Data API Key 2 (आपकी नई YouTube Key)
+// 🔑 2. YouTube Data API Key 2
 const YOUTUBE_API_KEY = "AIzaSyAjbt-L3NLaRi_0ZFwwI6-7xu3-nTkWkY0"; 
 
 const app = initializeApp(firebaseConfig);
@@ -30,6 +30,23 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchVideos();
     setupEventListeners();
 });
+
+// 🏠 Vinsona Media Click / Home Reset Logic
+window.resetToHome = function() {
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) searchInput.value = "";
+    
+    currentSearch = "";
+    currentCategory = "all";
+    isTrendingOnly = false;
+
+    // कैटेगरी बटन्स को 'All' पर सेट करें
+    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    const allBtn = document.querySelector('.cat-btn[data-category="all"]');
+    if (allBtn) allBtn.classList.add("active");
+
+    applyFilters();
+};
 
 // 🎬 Fetch Videos from Firebase
 async function fetchVideos() {
@@ -142,18 +159,31 @@ async function searchYouTubeLive(searchTerm) {
 
 // ⚙️ Setup Event Listeners
 function setupEventListeners() {
+    const searchInput = document.getElementById("search-input");
+
+    // 💡 Header Title Click (Vinsona Media पर टच करते ही फ़ायरबेस के वीडियो लोड होंगे)
+    const logoTitle = document.querySelector("header h1");
+    if (logoTitle) {
+        logoTitle.style.cursor = "pointer";
+        logoTitle.addEventListener("click", window.resetToHome);
+    }
+
     // Categories
     document.querySelectorAll(".cat-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
             document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
             e.target.classList.add("active");
+            
+            // सर्च साफ़ करें
+            currentSearch = "";
+            if (searchInput) searchInput.value = "";
+
             currentCategory = e.target.getAttribute("data-category");
             applyFilters();
         });
     });
 
     // Search Box with Debounce
-    const searchInput = document.getElementById("search-input");
     if (searchInput) {
         searchInput.addEventListener("input", (e) => {
             clearTimeout(searchDebounce);
@@ -170,12 +200,16 @@ function setupEventListeners() {
 
     if (filterTrending) {
         filterTrending.addEventListener("click", () => {
+            currentSearch = "";
+            if (searchInput) searchInput.value = "";
             isTrendingOnly = true;
             applyFilters();
         });
     }
     if (filterAllTags) {
         filterAllTags.addEventListener("click", () => {
+            currentSearch = "";
+            if (searchInput) searchInput.value = "";
             isTrendingOnly = false;
             applyFilters();
         });
@@ -286,7 +320,7 @@ const legalData = {
     `,
     dmca: `
         <h2>DMCA / Copyright Policy</h2>
-        <p>Vinsona Media सभी कॉपीराइट नियमों का सम्मान करता है। यदि आप किसी सामग्री के वैध मालिक हैं और उसे साइट से हटवाना चाहते हैं, तो कृपया vinsona9818@gmail.com पर संपर्क करें। हम 24-48 घंटों में इसे हटा देंगे।</p>
+        <p>Vinsona Media सभी कॉपीराइट नियमों का सम्मान करता है। यदि आप किसी सामग्री के वैध मालिक हैं और उसे हटवाना चाहते हैं, तो कृपया vinsona9818@gmail.com पर संपर्क करें। हम 24-48 घंटों में इसे हटा देंगे।</p>
     `
 };
 
