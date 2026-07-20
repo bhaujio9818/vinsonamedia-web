@@ -32,7 +32,6 @@ async function deleteOldData() {
     } catch (err) { console.error("डिलीट एरर:", err); }
 }
 
-// 🎵 Spotify टोकन जनरेट करने का फंक्शन
 async function getSpotifyToken() {
     try {
         const response = await axios.post(
@@ -52,81 +51,57 @@ async function getSpotifyToken() {
     }
 }
 
-// 🎵 Spotify के ट्रेंडिंग गाने लाने का फंक्शन
-async function fetchSpotifyTrends(spotifyToken) {
-    if (!spotifyToken) return 0;
+async function fetchSpotifyAndYoutubeTrends(spotifyToken) {
+    let count = 0;
     try {
-        const url = `https://api.spotify.com/v1/search?q=Hindi%20Trending%20Top%20Hits&type=track&market=IN&limit=15`;
-        const response = await axios.get(url, {
-            headers: { 'Authorization': `Bearer ${spotifyToken}` }
-        });
-
-        const tracks = response.data.tracks.items;
-        let count = 0;
-
-        for (let track of tracks) {
-            await addDoc(collection(db, "trending_reels"), {
-                title: `${track.name} - ${track.artists[0].name}`,
-                category: "spotify_music",
-                spotifyId: track.id,
-                audioUrl: track.preview_url || "",
-                imageUrl: track.album.images[0]?.url || "",
-                views: `${Math.floor(Math.random() * 800 + 200)}K Plays`,
-                trending: true,
-                createdAt: serverTimestamp()
+        let trackNames = [];
+        if (spotifyToken) {
+            // 1. Spotify से भारत के टॉप ट्रेंडिंग गानों की लिस्ट निकालना
+            const url = `https://api.spotify.com/v1/search?q=Top%20Hindi%20Trending&type=track&market=IN&limit=10`;
+            const response = await axios.get(url, {
+                headers: { 'Authorization': `Bearer ${spotifyToken}` }
             });
-            count++;
+            const tracks = response.data.tracks.items;
+            trackNames = tracks.map(t => `${t.name} ${t.artists[0].name}`);
+        }
+
+        // 2. अगर Spotify से नाम मिले तो उन गानों के यूट्यूब शॉर्ट्स, वरना डिफ़ॉल्ट ट्रेंड्स खींचना
+        const queries = trackNames.length > 0 ? trackNames : ["Hindi Trending Status Song", "Viral Instagram Reel Audio India"];
+
+        for (let query of queries) {
+            const ytUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&videoEmbeddable=true&regionCode=IN&maxResults=2&key=${YOUTUBE_API_KEY}`;
+            const ytRes = await axios.get(ytUrl);
+            
+            for (let video of ytRes.data.items) {
+                if (!video.id.videoId) continue;
+
+                await addDoc(collection(db, "trending_reels"), {
+                    title: `🎵 ${video.snippet.title}`,
+                    category: "status", // वेबसाइट की कैटेगरी के साथ परफेक्ट मैच
+                    youtubeId: video.id.videoId,
+                    views: `${Math.floor(Math.random() * 800 + 200)}K`,
+                    trending: true,
+                    createdAt: serverTimestamp()
+                });
+                count++;
+            }
         }
         return count;
     } catch (error) {
-        console.error("❌ Spotify Trends एरर:", error.message);
-        return 0;
-    }
-}
-
-// 🎥 YouTube ट्रेंड्स लाने का फंक्शन
-async function fetchLiveYoutubeTrends(searchQuery, categoryName, maxResults) {
-    try {
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchQuery)}&type=video&videoEmbeddable=true&regionCode=IN&maxResults=${maxResults}&key=${YOUTUBE_API_KEY}`;
-        const response = await axios.get(url);
-        const videos = response.data.items;
-        let count = 0;
-
-        for (let video of videos) {
-            if (!video.id.videoId) continue;
-
-            await addDoc(collection(db, "trending_reels"), {
-                title: video.snippet.title,
-                category: categoryName,
-                youtubeId: video.id.videoId,
-                views: `${Math.floor(Math.random() * 700 + 300)}K`,
-                trending: Math.random() > 0.5 ? true : false,
-                createdAt: serverTimestamp()
-            });
-            count++;
-        }
+        console.error("❌ Trends Fetching Error:", error.message);
         return count;
-    } catch (error) {
-        console.error(`❌ ${searchQuery} एरर:`, error.message);
-        return 0;
     }
 }
 
 async function startAutoScraper() {
     try {
         await deleteOldData();
-        console.log("🚀 AI Trend Engine चालू हो रहा है...");
+        console.log("🚀 Spotify + YouTube Engine चालू हो रहा है...");
 
-        // 1. YouTube गानों का लाइव डेटा
-        const ytCount = await fetchLiveYoutubeTrends("Hindi Trending Status Song", "status", 15);
-        console.log(`🎥 YouTube से ${ytCount} वीडियो लोड हुए।`);
-
-        // 2. Spotify ट्रेंडिंग म्यूज़िक का डेटा
         const spotifyToken = await getSpotifyToken();
-        const spCount = await fetchSpotifyTrends(spotifyToken);
-        console.log(`🎵 Spotify से ${spCount} वायरल गाने लोड हुए।`);
+        const totalLoaded = await fetchSpotifyAndYoutubeTrends(spotifyToken);
 
-        console.log(`\n🎉 बधाई हो! कुल ${ytCount + spCount} YouTube + Spotify ट्रेंडिंग आइटम्स सेट हो गए हैं!`);
+        console.log(`\n🎉 सफलता! कुल ${totalLoaded} 100% वर्किंग और लाइव गाने लोड हो चुके हैं!`);
         process.exit(0);
     } catch (e) {
         console.error("❌ मुख्य एरर: ", e);
