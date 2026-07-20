@@ -46,7 +46,7 @@ async function fetchVideos() {
     }
 }
 
-// 🎯 Render Video Cards
+// 🎯 Render Video Cards (Fixed Theme Color Issue for Light Mode)
 function renderCards(videosToRender) {
     const container = document.getElementById("content-container");
     if (!container) return;
@@ -64,10 +64,10 @@ function renderCards(videosToRender) {
                 ${video.trending ? `<span class="badge" style="position:absolute; top:10px; left:10px; background:#ff4757; color:#fff; font-size:11px; padding:3px 8px; border-radius:4px; font-weight:bold;">🔥 HOT</span>` : ''}
             </div>
             <div class="card-info" style="padding:12px 5px;">
-                <h4 style="margin:0 0 6px 0; font-size:14px; color:#fff; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(video.title)}</h4>
-                <div style="font-size:12px; color:#aaa; display:flex; justify-content:space-between; align-items:center;">
+                <h4 style="margin:0 0 6px 0; font-size:14px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(video.title)}</h4>
+                <div style="font-size:12px; display:flex; justify-content:space-between; align-items:center;">
                     <span>👁️ ${video.views || '100K'} व्यूज</span>
-                    <span style="text-transform:uppercase; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px;">${video.category || 'shorts'}</span>
+                    <span style="text-transform:uppercase; background:rgba(128,128,128,0.2); padding:2px 6px; border-radius:4px; font-size:10px;">${video.category || 'shorts'}</span>
                 </div>
             </div>
         </div>
