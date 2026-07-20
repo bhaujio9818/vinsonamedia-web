@@ -159,6 +159,16 @@ function setupEventListeners() {
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
     }
+
+    // Theme Toggle
+    const themeBtn = document.getElementById("themeToggleBtn");
+    if (themeBtn) {
+        themeBtn.addEventListener("click", () => {
+            const currentTheme = document.documentElement.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", newTheme);
+        });
+    }
 }
 
 // 🎥 Open Video Modal
@@ -216,6 +226,44 @@ window.triggerTimer = function(youtubeId) {
             window.open(`https://www.youtube.com/watch?v=${youtubeId}`, '_blank');
         }
     }, 1000);
+};
+
+// 📜 Policy Pages Data & Handlers
+const legalData = {
+    privacy: `
+        <h2>Privacy Policy</h2>
+        <p>Vinsona Media आपकी प्राइवेसी का ध्यान रखता है। हम आपकी पसंद और यूजर एक्सपीरियंस को बेहतर बनाने के लिए कुकीज़ (Cookies) का उपयोग करते हैं। आपकी कोई भी पर्सनल जानकारी सेव नहीं की जाती है। गूगल एडसेंस (AdSense) विज्ञापनों के लिए कुकीज़ का उपयोग कर सकता है।</p>
+    `,
+    terms: `
+        <h2>Terms & Conditions</h2>
+        <p>Vinsona Media एक एंटरटेनमेंट प्लेटफॉर्म है। इस वेबसाइट पर उपलब्ध सामग्री केवल प्रचार और मनोरंजन के उद्देश्य से उपलब्ध कराई जाती है।</p>
+    `,
+    dmca: `
+        <h2>DMCA / Copyright Policy</h2>
+        <p>Vinsona Media सभी कॉपीराइट नियमों का सम्मान करता है। यदि आप किसी सामग्री के वैध मालिक हैं और उसे साइट से हटवाना चाहते हैं, तो कृपया vinsona9818@gmail.com पर संपर्क करें। हम 24-48 घंटों में इसे हटा देंगे।</p>
+    `
+};
+
+window.showLegalPage = function(type) {
+    const legalModal = document.getElementById("legal-modal");
+    const legalText = document.getElementById("legal-text");
+    
+    if (legalModal && legalText && legalData[type]) {
+        legalText.innerHTML = legalData[type];
+        legalModal.classList.remove("hidden");
+    }
+};
+
+window.closeLegalPage = function() {
+    const legalModal = document.getElementById("legal-modal");
+    if (legalModal) {
+        legalModal.classList.add("hidden");
+    }
+};
+
+window.acceptCookies = function() {
+    const bar = document.getElementById("cookie-notice");
+    if (bar) bar.style.display = "none";
 };
 
 // 🛠️ Utility: Escape HTML
