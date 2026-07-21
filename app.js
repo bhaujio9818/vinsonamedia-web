@@ -58,20 +58,17 @@ function initSmartContent() {
                 fbVideos.push({ id: doc.id, ...doc.data() });
             });
 
-            // डेट के हिसाब से सॉर्ट करें
             fbVideos.sort((a, b) => {
                 const dateA = a.createdAt ? new Date(a.createdAt) : 0;
                 const dateB = b.createdAt ? new Date(b.createdAt) : 0;
                 return dateB - dateA;
             });
 
-            // चेक करें कि क्या आज का कोई वीडियो फ़ायरबेस में है?
             const todayStr = new Date().toDateString();
             const hasTodayVideo = fbVideos.some(v => v.createdAt && new Date(v.createdAt).toDateString() === todayStr);
 
             if (!hasTodayVideo) {
-                // अगर आज का वीडियो फ़ायरबेस में नहीं है, तो ऑटोमैटिक यूट्यूब से ताज़ा वीडियो लाओ
-                console.log("No video for today in Firebase. Auto-fetching daily Youtube trending...");
+                // ⚡ अब बिल्कुल ताज़ा (Latest Uploaded) वीडियो खींचेगा
                 const autoYoutubeVideos = await fetchAutoDailyTrending();
                 allVideos = [...autoYoutubeVideos, ...fbVideos];
             } else {
@@ -91,10 +88,11 @@ function initSmartContent() {
     }
 }
 
-// 🌅 Automatic Daily Youtube Fetcher
+// 🌅 Automatic Daily Youtube Fetcher (Order By Date - 100% Newest First)
 async function fetchAutoDailyTrending() {
     try {
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=trending+hindi+shorts+status+2026&type=video&key=${YOUTUBE_API_KEY}`;
+        // order=date लगाने से सबसे लेटेस्ट अपलोड हुए गानें/शॉर्ट्स ही आएँगे
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=hindi+shorts+status&order=date&type=video&key=${YOUTUBE_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -104,7 +102,7 @@ async function fetchAutoDailyTrending() {
                 youtubeId: item.id.videoId,
                 title: item.snippet.title,
                 category: "shorts",
-                views: "TODAY HOT 🔥",
+                views: "LATEST 🔥",
                 trending: true,
                 createdAt: new Date().toISOString()
             }));
@@ -130,7 +128,7 @@ function renderCards(videosToRender) {
             <div class="thumbnail-wrapper" style="position:relative; aspect-ratio:16/9; background:#000; border-radius:12px; overflow:hidden;">
                 <img src="https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg" alt="${escapeHtml(video.title)}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
                 <div class="play-icon" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.6); border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px;">▶</div>
-                ${video.trending ? `<span class="badge" style="position:absolute; top:10px; left:10px; background:#ff4757; color:#fff; font-size:11px; padding:3px 8px; border-radius:4px; font-weight:bold;">🔥 NEW</span>` : ''}
+                ${video.trending ? `<span class="badge" style="position:absolute; top:10px; left:10px; background:#ff4757; color:#fff; font-size:11px; padding:3px 8px; border-radius:4px; font-weight:bold;">🔥 LATEST</span>` : ''}
             </div>
             <div class="card-info" style="padding:12px 5px;">
                 <h4 style="margin:0 0 6px 0; font-size:14px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(video.title)}</h4>
@@ -173,13 +171,13 @@ function applyFilters() {
     renderCards(filteredVideos);
 }
 
-// 🌐 Live Search from YouTube Data API v3
+// 🌐 Live Search from YouTube Data API v3 (Latest First)
 async function searchYouTubeLive(searchTerm) {
     const container = document.getElementById("content-container");
     if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">YouTube से लाइव गानें खोजे जा रहे हैं... 🔍</p>`;
 
     try {
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&type=video&key=${YOUTUBE_API_KEY}`;
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&order=date&type=video&key=${YOUTUBE_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -225,7 +223,7 @@ function setupEventListeners() {
             currentCategory = e.target.getAttribute("data-category");
             
             if (currentCategory !== "all") {
-                searchYouTubeLive(`trending ${currentCategory} hindi shorts`);
+                searchYouTubeLive(`${currentCategory} hindi shorts status`);
             } else {
                 applyFilters();
             }
