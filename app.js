@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // 🔑 1. Firebase Configuration
 const firebaseConfig = {
@@ -11,7 +11,7 @@ const firebaseConfig = {
   appId: "1:858167007545:web:0cec92359af21fb2cbf0e8"
 };
 
-// 🔑 2. YouTube Data API Key 2
+// 🔑 2. YouTube Data API Key
 const YOUTUBE_API_KEY = "AIzaSyAjbt-L3NLaRi_0ZFwwI6-7xu3-nTkWkY0"; 
 
 const app = initializeApp(firebaseConfig);
@@ -27,11 +27,11 @@ let searchDebounce = null;
 
 // 🚀 Page Initializer
 document.addEventListener("DOMContentLoaded", () => {
-    fetchVideos();
+    initSmartContent();
     setupEventListeners();
 });
 
-// 🏠 Vinsona Media Click / Home Reset Logic
+// 🏠 Reset Home / Vinsona Media Click
 window.resetToHome = function() {
     const searchInput = document.getElementById("search-input");
     if (searchInput) searchInput.value = "";
@@ -40,7 +40,6 @@ window.resetToHome = function() {
     currentCategory = "all";
     isTrendingOnly = false;
 
-    // कैटेगरी बटन्स को 'All' पर सेट करें
     document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     const allBtn = document.querySelector('.cat-btn[data-category="all"]');
     if (allBtn) allBtn.classList.add("active");
@@ -48,22 +47,57 @@ window.resetToHome = function() {
     applyFilters();
 };
 
-// 🎬 Fetch Videos from Firebase
-async function fetchVideos() {
-    const container = document.getElementById("content-container");
+// 🤖 Smart Content Loader (Firebase check karega, agar data nahi mila toh AUTO Trending Youtube se uthayega)
+function initSmartContent() {
     try {
-        const q = query(collection(db, "trending_reels"), orderBy("createdAt", "desc"), limit(120));
-        const querySnapshot = await getDocs(q);
+        const colRef = collection(db, "trending_reels");
         
-        allVideos = [];
-        querySnapshot.forEach((doc) => {
-            allVideos.push({ id: doc.id, ...doc.data() });
-        });
+        onSnapshot(colRef, (querySnapshot) => {
+            allVideos = [];
+            querySnapshot.forEach((doc) => {
+                allVideos.push({ id: doc.id, ...doc.data() });
+            });
 
-        applyFilters();
-    } catch (error) {
-        console.error("Error fetching videos:", error);
-        if(container) container.innerHTML = `<p style="text-align:center; color:#ff4d4d;">वीडियो लोड करने में समस्या आई। कृपया रिफ्रेश करें।</p>`;
+            // Agar Firebase me naya data nahi hai, toh AUTO Youtube Trending Shorts load karo
+            if (allVideos.length === 0) {
+                fetchAutoDailyTrending();
+            } else {
+                allVideos.sort((a, b) => {
+                    const dateA = a.createdAt ? new Date(a.createdAt) : 0;
+                    const dateB = b.createdAt ? new Date(b.createdAt) : 0;
+                    return dateB - dateA;
+                });
+                applyFilters();
+            }
+        }, (error) => {
+            console.error("Firebase read error, switching to auto-trending mode...", error);
+            fetchAutoDailyTrending();
+        });
+    } catch (err) {
+        fetchAutoDailyTrending();
+    }
+}
+
+// 🌅 Automatic Daily Trending Loader (Har subah ka taaza content)
+async function fetchAutoDailyTrending() {
+    try {
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=trending+hindi+shorts+status&type=video&key=${YOUTUBE_API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.items && data.items.length > 0) {
+            allVideos = data.items.map(item => ({
+                id: item.id.videoId,
+                youtubeId: item.id.videoId,
+                title: item.snippet.title,
+                category: "shorts",
+                views: "TODAY HOT 🔥",
+                trending: true
+            }));
+            applyFilters();
+        }
+    } catch (err) {
+        console.error("Auto Fetch Error:", err);
     }
 }
 
@@ -82,7 +116,7 @@ function renderCards(videosToRender) {
             <div class="thumbnail-wrapper" style="position:relative; aspect-ratio:16/9; background:#000; border-radius:12px; overflow:hidden;">
                 <img src="https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg" alt="${escapeHtml(video.title)}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
                 <div class="play-icon" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.6); border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px;">▶</div>
-                ${video.trending ? `<span class="badge" style="position:absolute; top:10px; left:10px; background:#ff4757; color:#fff; font-size:11px; padding:3px 8px; border-radius:4px; font-weight:bold;">🔥 HOT</span>` : ''}
+                ${video.trending ? `<span class="badge" style="position:absolute; top:10px; left:10px; background:#ff4757; color:#fff; font-size:11px; padding:3px 8px; border-radius:4px; font-weight:bold;">🔥 NEW</span>` : ''}
             </div>
             <div class="card-info" style="padding:12px 5px;">
                 <h4 style="margin:0 0 6px 0; font-size:14px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(video.title)}</h4>
@@ -104,13 +138,11 @@ function renderCards(videosToRender) {
     }
 }
 
-// 🔍 Filter & Live YouTube Search Logic
+// 🔍 Filter & Search Handler
 function applyFilters() {
     if (currentSearch.length > 2) {
-        // 1. पहले फ़ायरबेस डेटाबेस में खोजो
         filteredVideos = allVideos.filter(video => video.title.toLowerCase().includes(currentSearch.toLowerCase()));
         
-        // 2. अगर फ़ायरबेस में नहीं मिला तो डायरेक्ट YouTube से लाइव सर्च करो!
         if (filteredVideos.length === 0) {
             searchYouTubeLive(currentSearch);
             return;
@@ -161,7 +193,6 @@ async function searchYouTubeLive(searchTerm) {
 function setupEventListeners() {
     const searchInput = document.getElementById("search-input");
 
-    // 💡 Header Title Click (Vinsona Media पर टच करते ही फ़ायरबेस के वीडियो लोड होंगे)
     const logoTitle = document.querySelector("header h1");
     if (logoTitle) {
         logoTitle.style.cursor = "pointer";
@@ -174,16 +205,21 @@ function setupEventListeners() {
             document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
             e.target.classList.add("active");
             
-            // सर्च साफ़ करें
             currentSearch = "";
             if (searchInput) searchInput.value = "";
 
             currentCategory = e.target.getAttribute("data-category");
-            applyFilters();
+            
+            // Category click par live auto search agar custom firebase empty ho
+            if (currentCategory !== "all") {
+                searchYouTubeLive(`trending ${currentCategory} hindi shorts`);
+            } else {
+                applyFilters();
+            }
         });
     });
 
-    // Search Box with Debounce
+    // Search Box
     if (searchInput) {
         searchInput.addEventListener("input", (e) => {
             clearTimeout(searchDebounce);
