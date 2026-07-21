@@ -87,7 +87,7 @@ function initSmartContent() {
     }
 }
 
-// 🌅 Automatic Weekly Viral Trending Fetcher (1 Week + High Views)
+// 🌅 Automatic Weekly Viral Trending Fetcher
 async function fetchAutoDailyTrending() {
     try {
         const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
@@ -170,14 +170,17 @@ function applyFilters() {
     renderCards(filteredVideos);
 }
 
-// 🌐 Live Category & Search (1 Week + High ViewCount Strict Filter)
-async function searchYouTubeLive(searchTerm) {
+// 🌐 Smart Category & Search Handler (Full Songs vs Shorts Separated)
+async function searchYouTubeLive(searchTerm, isFullSong = false) {
     const container = document.getElementById("content-container");
-    if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">ताज़ा ट्रेंडिंग वीडियो खोजे जा रहे हैं... 🔍</p>`;
+    if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">ताज़ा ट्रेंडिंग कंटेंट लोड हो रहा है... 🔍</p>`;
 
     try {
         const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&publishedAfter=${oneWeekAgo}&order=viewCount&type=video&key=${YOUTUBE_API_KEY}`;
+        
+        // 🎵 अगर 'फुल वीडियो सांग' चुना गया है तो videoDuration=medium (4-20 मिनट) का पैरामीटर लगेगा
+        let durationParam = isFullSong ? "&videoDuration=medium" : "";
+        let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&publishedAfter=${oneWeekAgo}&order=viewCount&type=video${durationParam}&key=${YOUTUBE_API_KEY}`;
         
         const response = await fetch(url);
         const data = await response.json();
@@ -187,14 +190,14 @@ async function searchYouTubeLive(searchTerm) {
                 id: item.id.videoId,
                 youtubeId: item.id.videoId,
                 title: item.snippet.title,
-                category: currentCategory !== "all" ? currentCategory : "shorts",
-                views: "VIRAL 🔥",
+                category: currentCategory !== "all" ? currentCategory : "fullsong",
+                views: "FULL HD 🎵",
                 trending: true
             }));
             displayedCount = 12;
             renderCards(filteredVideos);
         } else {
-            if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">कोई ट्रेंडिंग वीडियो नहीं मिला! 🔍</p>`;
+            if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">कोई वीडियो नहीं मिला! 🔍</p>`;
         }
     } catch (err) {
         console.error("YouTube Live Search Error:", err);
@@ -212,7 +215,7 @@ function setupEventListeners() {
         logoTitle.addEventListener("click", window.resetToHome);
     }
 
-    // Categories (हर ऑप्शन के लिए 7 दिन का हाई-व्यू फ़िल्टर)
+    // Categories
     document.querySelectorAll(".cat-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
             document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
@@ -223,8 +226,11 @@ function setupEventListeners() {
 
             currentCategory = e.target.getAttribute("data-category");
             
-            if (currentCategory !== "all") {
-                searchYouTubeLive(`trending ${currentCategory} hindi status shorts`);
+            if (currentCategory === "fullsong") {
+                // 🎵 फुल सांग के लिए केवल 'Full Video Song' खोजो, Shorts नहीं!
+                searchYouTubeLive(`latest hindi full video song 2026`, true);
+            } else if (currentCategory !== "all") {
+                searchYouTubeLive(`trending ${currentCategory} hindi status shorts`, false);
             } else {
                 applyFilters();
             }
