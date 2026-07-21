@@ -68,7 +68,7 @@ function initSmartContent() {
             const hasTodayVideo = fbVideos.some(v => v.createdAt && new Date(v.createdAt).toDateString() === todayStr);
 
             if (!hasTodayVideo) {
-                // ⚡ अब बिल्कुल ताज़ा (Latest Uploaded) वीडियो खींचेगा
+                // ⚡ अब ताज़ा + हाई व्यूज वाले असली ट्रेंडिंग वीडियो ही आएँगे
                 const autoYoutubeVideos = await fetchAutoDailyTrending();
                 allVideos = [...autoYoutubeVideos, ...fbVideos];
             } else {
@@ -88,11 +88,14 @@ function initSmartContent() {
     }
 }
 
-// 🌅 Automatic Daily Youtube Fetcher (Order By Date - 100% Newest First)
+// 🌅 Automatic Daily Viral Trending Fetcher (Recent + High Views Only)
 async function fetchAutoDailyTrending() {
     try {
-        // order=date लगाने से सबसे लेटेस्ट अपलोड हुए गानें/शॉर्ट्स ही आएँगे
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=hindi+shorts+status&order=date&type=video&key=${YOUTUBE_API_KEY}`;
+        // पिछले 48 घंटों की तारीख़ निकालना
+        const twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+        
+        // order=viewCount + publishedAfter लगाने से ताज़ा वायरल गानें ही आएँगे
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=trending+hindi+shorts+status&publishedAfter=${twoDaysAgo}&order=viewCount&type=video&key=${YOUTUBE_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -102,7 +105,7 @@ async function fetchAutoDailyTrending() {
                 youtubeId: item.id.videoId,
                 title: item.snippet.title,
                 category: "shorts",
-                views: "LATEST 🔥",
+                views: "VIRAL 🔥",
                 trending: true,
                 createdAt: new Date().toISOString()
             }));
@@ -128,7 +131,7 @@ function renderCards(videosToRender) {
             <div class="thumbnail-wrapper" style="position:relative; aspect-ratio:16/9; background:#000; border-radius:12px; overflow:hidden;">
                 <img src="https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg" alt="${escapeHtml(video.title)}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
                 <div class="play-icon" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.6); border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px;">▶</div>
-                ${video.trending ? `<span class="badge" style="position:absolute; top:10px; left:10px; background:#ff4757; color:#fff; font-size:11px; padding:3px 8px; border-radius:4px; font-weight:bold;">🔥 LATEST</span>` : ''}
+                ${video.trending ? `<span class="badge" style="position:absolute; top:10px; left:10px; background:#ff4757; color:#fff; font-size:11px; padding:3px 8px; border-radius:4px; font-weight:bold;">🔥 VIRAL</span>` : ''}
             </div>
             <div class="card-info" style="padding:12px 5px;">
                 <h4 style="margin:0 0 6px 0; font-size:14px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(video.title)}</h4>
@@ -171,13 +174,13 @@ function applyFilters() {
     renderCards(filteredVideos);
 }
 
-// 🌐 Live Search from YouTube Data API v3 (Latest First)
+// 🌐 Live Search from YouTube Data API v3
 async function searchYouTubeLive(searchTerm) {
     const container = document.getElementById("content-container");
     if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">YouTube से लाइव गानें खोजे जा रहे हैं... 🔍</p>`;
 
     try {
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&order=date&type=video&key=${YOUTUBE_API_KEY}`;
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&type=video&key=${YOUTUBE_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -223,7 +226,7 @@ function setupEventListeners() {
             currentCategory = e.target.getAttribute("data-category");
             
             if (currentCategory !== "all") {
-                searchYouTubeLive(`${currentCategory} hindi shorts status`);
+                searchYouTubeLive(`trending ${currentCategory} hindi shorts status`);
             } else {
                 applyFilters();
             }
