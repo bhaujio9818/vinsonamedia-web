@@ -68,7 +68,6 @@ function initSmartContent() {
             const hasTodayVideo = fbVideos.some(v => v.createdAt && new Date(v.createdAt).toDateString() === todayStr);
 
             if (!hasTodayVideo) {
-                // ⚡ अब 1 हफ्ते के सबसे वायरल वीडियो लाएगा
                 const autoYoutubeVideos = await fetchAutoDailyTrending();
                 allVideos = [...autoYoutubeVideos, ...fbVideos];
             } else {
@@ -88,13 +87,10 @@ function initSmartContent() {
     }
 }
 
-// 🌅 Automatic Weekly Viral Trending Fetcher (1 Week + High Views Only)
+// 🌅 Automatic Weekly Viral Trending Fetcher (1 Week + High Views)
 async function fetchAutoDailyTrending() {
     try {
-        // पिछले 7 दिनों (1 हफ़्ते) की तारीख़ निकालना
         const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-        
-        // publishedAfter = 7 दिन पुराना + order=viewCount (ताज़ा और सबसे हिट गानें)
         const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=trending+hindi+shorts+status&publishedAfter=${oneWeekAgo}&order=viewCount&type=video&key=${YOUTUBE_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
@@ -174,13 +170,15 @@ function applyFilters() {
     renderCards(filteredVideos);
 }
 
-// 🌐 Live Search from YouTube Data API v3
+// 🌐 Live Category & Search (1 Week + High ViewCount Strict Filter)
 async function searchYouTubeLive(searchTerm) {
     const container = document.getElementById("content-container");
-    if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">YouTube से लाइव गानें खोजे जा रहे हैं... 🔍</p>`;
+    if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">ताज़ा ट्रेंडिंग वीडियो खोजे जा रहे हैं... 🔍</p>`;
 
     try {
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&type=video&key=${YOUTUBE_API_KEY}`;
+        const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(searchTerm)}&publishedAfter=${oneWeekAgo}&order=viewCount&type=video&key=${YOUTUBE_API_KEY}`;
+        
         const response = await fetch(url);
         const data = await response.json();
 
@@ -189,18 +187,18 @@ async function searchYouTubeLive(searchTerm) {
                 id: item.id.videoId,
                 youtubeId: item.id.videoId,
                 title: item.snippet.title,
-                category: "search",
-                views: "LIVE",
-                trending: false
+                category: currentCategory !== "all" ? currentCategory : "shorts",
+                views: "VIRAL 🔥",
+                trending: true
             }));
             displayedCount = 12;
             renderCards(filteredVideos);
         } else {
-            if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">कोई वीडियो नहीं मिला! 🔍</p>`;
+            if (container) container.innerHTML = `<p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px 0;">कोई ट्रेंडिंग वीडियो नहीं मिला! 🔍</p>`;
         }
     } catch (err) {
         console.error("YouTube Live Search Error:", err);
-        if (container) container.innerHTML = `<p style="text-align:center; color:#ff4d4d; grid-column: 1/-1; padding: 40px 0;">लाइव सर्च में समस्या आई।</p>`;
+        if (container) container.innerHTML = `<p style="text-align:center; color:#ff4d4d; grid-column: 1/-1; padding: 40px 0;">वीडियो लोड करने में समस्या आई।</p>`;
     }
 }
 
@@ -214,7 +212,7 @@ function setupEventListeners() {
         logoTitle.addEventListener("click", window.resetToHome);
     }
 
-    // Categories
+    // Categories (हर ऑप्शन के लिए 7 दिन का हाई-व्यू फ़िल्टर)
     document.querySelectorAll(".cat-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
             document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
@@ -226,7 +224,7 @@ function setupEventListeners() {
             currentCategory = e.target.getAttribute("data-category");
             
             if (currentCategory !== "all") {
-                searchYouTubeLive(`trending ${currentCategory} hindi shorts status`);
+                searchYouTubeLive(`trending ${currentCategory} hindi status shorts`);
             } else {
                 applyFilters();
             }
