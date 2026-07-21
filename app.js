@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupEventListeners();
 });
 
-// 🏠 Reset Home / Vinsona Media Click
+// 🏠 Home Reset
 window.resetToHome = function() {
     const searchInput = document.getElementById("search-input");
     if (searchInput) searchInput.value = "";
@@ -47,58 +47,72 @@ window.resetToHome = function() {
     applyFilters();
 };
 
-// 🤖 Smart Content Loader (Firebase check karega, agar data nahi mila toh AUTO Trending Youtube se uthayega)
+// 🤖 Smart Content Loader
 function initSmartContent() {
     try {
         const colRef = collection(db, "trending_reels");
         
-        onSnapshot(colRef, (querySnapshot) => {
-            allVideos = [];
+        onSnapshot(colRef, async (querySnapshot) => {
+            let fbVideos = [];
             querySnapshot.forEach((doc) => {
-                allVideos.push({ id: doc.id, ...doc.data() });
+                fbVideos.push({ id: doc.id, ...doc.data() });
             });
 
-            // Agar Firebase me naya data nahi hai, toh AUTO Youtube Trending Shorts load karo
-            if (allVideos.length === 0) {
-                fetchAutoDailyTrending();
+            // डेट के हिसाब से सॉर्ट करें
+            fbVideos.sort((a, b) => {
+                const dateA = a.createdAt ? new Date(a.createdAt) : 0;
+                const dateB = b.createdAt ? new Date(b.createdAt) : 0;
+                return dateB - dateA;
+            });
+
+            // चेक करें कि क्या आज का कोई वीडियो फ़ायरबेस में है?
+            const todayStr = new Date().toDateString();
+            const hasTodayVideo = fbVideos.some(v => v.createdAt && new Date(v.createdAt).toDateString() === todayStr);
+
+            if (!hasTodayVideo) {
+                // अगर आज का वीडियो फ़ायरबेस में नहीं है, तो ऑटोमैटिक यूट्यूब से ताज़ा वीडियो लाओ
+                console.log("No video for today in Firebase. Auto-fetching daily Youtube trending...");
+                const autoYoutubeVideos = await fetchAutoDailyTrending();
+                allVideos = [...autoYoutubeVideos, ...fbVideos];
             } else {
-                allVideos.sort((a, b) => {
-                    const dateA = a.createdAt ? new Date(a.createdAt) : 0;
-                    const dateB = b.createdAt ? new Date(b.createdAt) : 0;
-                    return dateB - dateA;
-                });
-                applyFilters();
+                allVideos = fbVideos;
             }
+
+            applyFilters();
         }, (error) => {
-            console.error("Firebase read error, switching to auto-trending mode...", error);
-            fetchAutoDailyTrending();
+            console.error("Firebase Read Error:", error);
+            fetchAutoDailyTrending().then(ytVideos => {
+                allVideos = ytVideos;
+                applyFilters();
+            });
         });
     } catch (err) {
-        fetchAutoDailyTrending();
+        console.error("Init Error:", err);
     }
 }
 
-// 🌅 Automatic Daily Trending Loader (Har subah ka taaza content)
+// 🌅 Automatic Daily Youtube Fetcher
 async function fetchAutoDailyTrending() {
     try {
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=trending+hindi+shorts+status&type=video&key=${YOUTUBE_API_KEY}`;
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=trending+hindi+shorts+status+2026&type=video&key=${YOUTUBE_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
 
         if (data.items && data.items.length > 0) {
-            allVideos = data.items.map(item => ({
+            return data.items.map(item => ({
                 id: item.id.videoId,
                 youtubeId: item.id.videoId,
                 title: item.snippet.title,
                 category: "shorts",
                 views: "TODAY HOT 🔥",
-                trending: true
+                trending: true,
+                createdAt: new Date().toISOString()
             }));
-            applyFilters();
         }
     } catch (err) {
         console.error("Auto Fetch Error:", err);
     }
+    return [];
 }
 
 // 🎯 Render Video Cards
@@ -210,7 +224,6 @@ function setupEventListeners() {
 
             currentCategory = e.target.getAttribute("data-category");
             
-            // Category click par live auto search agar custom firebase empty ho
             if (currentCategory !== "all") {
                 searchYouTubeLive(`trending ${currentCategory} hindi shorts`);
             } else {
