@@ -144,7 +144,8 @@
             const voiceFile = req.result.file;
 
             try {
-                const app = await client("coqui/XTTS-v2"); 
+                // यहाँ आपका नया Hugging Face स्पेस कनेक्ट कर दिया है
+                const app = await client("ram9818/neha"); 
                 const result = await app.predict("/predict", [
                     text,        // टेक्स्ट
                     "hi",        // भाषा (Hindi)
