@@ -49,7 +49,7 @@
         <label>जो बुलवाना चाहते हैं वो टेक्स्ट लिखें:</label>
         <textarea id="textToSpeech" rows="4" placeholder="यहाँ अपना टेक्स्ट लिखें..."></textarea>
 
-        <button class="btn-gen" onclick="generateAudio()">2. Audio Generate करें</button>
+        <button class="btn-gen" onclick="generateAudio()">2. Unlimited Audio Generate करें</button>
     </div>
 
     <div id="status"></div>
@@ -65,6 +65,9 @@
 
 <script type="module">
     import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client/+esm";
+
+    // आपका Hugging Face Access Token डायरेक्ट कनेक्टेड है
+    const HF_TOKEN = "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"; 
 
     const dbName = "VoiceDatabase";
     let db;
@@ -128,7 +131,7 @@
             return;
         }
 
-        status.innerText = "⏳ ऑडियो बन रहा है, कृपया 10-15 सेकंड इंतज़ार करें...";
+        status.innerText = "⏳ Open-Source AI द्वारा ऑडियो बन रहा है, कृपया 10-15 सेकंड इंतज़ार करें...";
         document.getElementById('resultArea').style.display = 'none';
 
         const tx = db.transaction("voices", "readonly");
@@ -139,28 +142,25 @@
             const voiceFile = req.result.file;
 
             try {
-                // XTTS v2 का पब्लिक एक्टिव एपीआई कनेक्ट कर रहे हैं
-                const app = await client("coqui/XTTS-v2"); 
-                const result = await app.predict("/predict", {
-                    prompt: text,
-                    language: "hi",
-                    audio_file_pth: voiceFile,
-                    mic_file_path: null,
-                    use_mic: false,
-                    voice_cleanup: true,
-                    no_lang_auto_detect: false,
-                    agree: true
-                });
+                // HF_TOKEN के साथ XTTS-v2 कनेक्ट किया गया है
+                const app = await client("coqui/XTTS-v2", { hf_token: HF_TOKEN }); 
+                const result = await app.predict("/predict", [
+                    text,        // Prompt text
+                    "hi",        // Language (Hindi)
+                    voiceFile,   // Audio File
+                    null,
+                    true
+                ]);
 
                 const audioUrl = result.data[0].url;
                 document.getElementById('audioPlayer').src = audioUrl;
                 document.getElementById('downloadBtn').href = audioUrl;
                 document.getElementById('resultArea').style.display = 'block';
-                status.innerText = "✅ ऑडियो तैयार हो गया!";
+                status.innerText = "✅ ऑडियो सफलता से बन गया!";
 
             } catch (error) {
                 console.error(error);
-                status.innerText = "❌ एरर: सर्वर व्यस्त है या रिस्पॉन्स नहीं मिला। कृपया दोबारा कोशिश करें।";
+                status.innerText = "❌ एरर: ऑडियो जनरेट नहीं हो सका। कृपया दोबारा प्रयास करें।";
             }
         };
     };
