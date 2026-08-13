@@ -1,154 +1,171 @@
 <!DOCTYPE html>
-<html lang="hi" data-theme="dark">
+<html lang="hi">
 <head>
-    <meta name="google-site-verification" content="cSVUXRPjfSjka-ffzEbMDvrG43rKz7NNRdPiWzvRY2o" />
-    <!-- 📌 Basic Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vinsona Media - Premium Shorts & Status Videos</title>
-    <meta name="description" content="Vinsona Media पर देखें लेटेस्ट हिंदी ट्रेंडिंग शॉर्ट्स, रील्स, मोटिवेशनल और रोमांटिक वीडियो स्टेटस एक क्लिक में।">
-    <meta name="keywords" content="vinsona media, hindi shorts, video status, trending reels, romantic shorts, motivational video">
-    <meta name="author" content="Vinsona Media">
-    <meta name="robots" content="index, follow">
-
-    <!-- 🌐 Open Graph / Facebook Social Tags -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://vinsonamedia.in/">
-    <meta property="og:title" content="Vinsona Media - Premium Shorts & Status Videos">
-    <meta property="og:description" content="ट्रेंडिंग शॉर्ट्स, रील्स और वायरल वीडियो स्टेटस एक जगह देखें।">
-    <meta property="og:image" content="https://vinsonamedia.in/thumb.jpg">
-
-    <!-- 🐤 Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://vinsonamedia.in/">
-    <meta name="twitter:title" content="Vinsona Media - Premium Shorts & Status Videos">
-    <meta name="twitter:description" content="ट्रेंडिंग शॉर्ट्स, रील्स और वायरल वीडियो स्टेटस एक जगह देखें।">
-
-    <!-- 🎨 Favicon & Theme Color -->
-    <meta name="theme-color" content="#0f0f12">
-    <link rel="stylesheet" href="style.css">
-
-    <!-- 💰 Google AdSense Script (जब आपका AdSense कोड मिले, तब ca-pub-XXXXXXXXXXXXXXXXX बदल लें) -->
-    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+    <title>Permanent Voice Cloning Studio</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        .box { border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 20px; background: #fafafa; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input[type="file"], input[type="text"], textarea, select { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #218838; }
+        .btn-gen { background-color: #007bff; }
+        .btn-gen:hover { background-color: #0056b3; }
+        #status { font-weight: bold; color: #555; text-align: center; margin: 10px 0; }
+        #resultArea { text-align: center; display: none; margin-top: 20px; }
+        audio { width: 100%; margin-top: 10px; }
+        .download-btn { display: inline-block; margin-top: 10px; padding: 10px 20px; background: #17a2b8; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <button id="themeToggleBtn" class="theme-switch">🌓 मोड बदलें</button>
 
-    <header>
-        <h1>🔥 Vinsona Media</h1>
-        <p>ट्रेंडिंग शॉर्ट्स, रील्स और वायरल वीडियो स्टेटस एक जगह देखें</p>
-        <div class="search-box">
-            <input type="text" id="search-input" placeholder="यहाँ वीडियो या सांग खोजें...">
-        </div>
-        <div class="category-container">
-            <button class="cat-btn active" data-category="all">⚡ सब कुछ</button>
-            <button class="cat-btn" data-category="shorts">🎬 शॉर्ट वीडियो</button>
-            <button class="cat-btn" data-category="status">🎥 वीडियो स्टेटस</button>
-            <button class="cat-btn" data-category="motivation">🔥 मोटिवेशनल</button>
-            <button class="cat-btn" data-category="sad">💔 सैड शॉर्ट्स</button>
-            <button class="cat-btn" data-category="romantic">❤️ रोमांटिक वीडियो</button>
-            <button class="cat-btn" data-category="fullsong">🎵 फुल वीडियो सांग</button>
-        </div>
-        <div class="tag-filter-container">
-            <button class="tag-filter-btn" id="filter-trending">🔥 हॉट ट्रेंडिंग</button>
-            <button class="tag-filter-btn" id="filter-all-tags">✨ सब दिखाएं</button>
-        </div>
-    </header>
+<div class="container">
+    <h2>🎤 Permanent Voice Cloning Studio</h2>
 
-    <main id="content-container">
-        <div class="shimmer-card"></div>
-        <div class="shimmer-card"></div>
-    </main>
+    <!-- स्टेप 1: नई आवाज़ जोड़ना -->
+    <div class="box">
+        <h3>स्टेप 1: नई आवाज़ जोड़ें</h3>
+        <label>आवाज़ को नाम दें (उदा. Gulab Voice):</label>
+        <input type="text" id="voiceName" placeholder="यहाँ नाम लिखें...">
 
-    <div class="load-more-container">
-        <button id="loadMoreBtn" class="load-more-btn">🔄 और दिखाएं (Load More)</button>
+        <label>अपनी आवाज़ का सैंपल अपलोड करें:</label>
+        <input type="file" id="voiceSample" accept="audio/*">
+
+        <button onclick="saveVoicePermanently()">1. Voice Permanently Save करें</button>
     </div>
 
-    <!-- 📖 SEO Content & Articles Section for AdSense Fast Approval -->
-    <section class="seo-articles-container">
-        <div class="article-card">
-            <h2>🔥 Vinsona Media - ट्रेंडिंग रील्स और व्हाट्सएप स्टेटस प्लेटफॉर्म</h2>
-            <p>
-                Vinsona Media पर आपका स्वागत है! यहाँ आपको हर प्रकार के लेटेस्ट हिंदी वीडियो स्टेटस, व्हाट्सएप रील्स, रोमांस, सैड लव सॉन्ग्स और मोटिवेशनल शॉर्ट्स का बेहतरीन कलेक्शन मिलेगा। हमारी साइट प्रतिदिन अपडेट होती है ताकि आपको हमेशा ताज़ा और ट्रेंडिंग कंटेंट मिल सके।
-            </p>
-        </div>
+    <!-- स्टेप 2: ऑडियो जनरेट करना -->
+    <div class="box">
+        <h3>स्टेप 2: टेक्स्ट से ऑडियो बनाएँ</h3>
+        <label>अपनी सेव की हुई आवाज़ चुनें:</label>
+        <select id="voiceSelect">
+            <option value="">-- अपनी सेव की हुई आवाज़ चुनें --</option>
+        </select>
 
-        <div class="article-grid">
-            <article class="mini-blog">
-                <h3>📱 व्हाट्सएप स्टेटस और रील्स कैसे देखें?</h3>
-                <p>
-                    अगर आप अपनी सोशल मीडिया प्रोफ़ाइल या व्हाट्सएप स्टोरी के लिए बेस्ट एचडी रील्स और स्टेटस खोज रहे हैं, तो Vinsona Media एक बेहतरीन ज़रिया है। बस अपनी मनपसंद कैटेगरी चुनें, वीडियो पर क्लिक करें और प्ले करके देखें। 
-                </p>
-            </article>
+        <label>जो बुलवाना चाहते हैं वो टेक्स्ट लिखें:</label>
+        <textarea id="textToSpeech" rows="4" placeholder="यहाँ अपना टेक्स्ट लिखें..."></textarea>
 
-            <article class="mini-blog">
-                <h3>🎵 2026 के सबसे लोकप्रिय हिंदी लव और सैड सॉन्ग्स</h3>
-                <p>
-                    संगीत दिल के जज़्बातों को बयां करने का सबसे अच्छा तरीका है। हमारी साइट पर आपको बॉलीवुड के नए रोमांटिक गानों से लेकर दिल को छू लेने वाले सैड स्टेटस वीडियो का विशाल संग्रह मिलेगा, जिसे आप सीधे देख सकते हैं।
-                </p>
-            </article>
-        </div>
-    </section>
-
-    <!-- 🎥 Video Popup Modal (AdSense Safe) -->
-    <div id="video-popup-modal" class="modal hidden">
-        <div class="modal-content video-modal-content">
-            <span class="close-modal" id="close-video-modal">&times;</span>
-            <div class="video-player-wrapper">
-                <!-- यहाँ लाइव वीडियो प्ले होगा -->
-            </div>
-            <div class="video-details">
-                <h3 id="popup-video-title">Loading...</h3>
-                <div class="video-meta">
-                    <span class="rating">⭐⭐⭐⭐⭐</span>
-                    <span id="popup-video-views">👁️ 0 व्यूज</span>
-                </div>
-                <div class="popup-actions">
-                    <button id="popup-download-btn" class="download-btn">▶️ Watch Full Video</button>
-                </div>
-            </div>
-        </div>
+        <button class="btn-gen" onclick="generateAudio()">2. Audio Generate करें</button>
     </div>
 
-    <!-- ⏳ Timer Modal -->
-    <div id="download-modal" class="modal hidden">
-        <div class="modal-content">
-            <h3>वीडियो लोडिंग चालू है... 🚀</h3>
-            <div id="timer-number" class="timer-countdown">3</div>
-            <p style="font-size: 12px; color: #aaa;">मुफ़्त कंटेंट का आनंद लेने के लिए बने रहें</p>
-        </div>
+    <div id="status"></div>
+
+    <!-- स्टेप 3: आउटपुट डाउनलोड करना -->
+    <div id="resultArea" class="box">
+        <h3>आपकी आवाज़ तैयार है!</h3>
+        <audio id="audioPlayer" controls></audio>
+        <br>
+        <a id="downloadBtn" class="download-btn" download="cloned_voice.wav">📥 Audio File Download करें</a>
     </div>
+</div>
 
-    <!-- 🍪 Cookie Notice -->
-    <div id="cookie-notice" class="cookie-bar">
-        <p>हम आपकी पसंद को याद रखने और बेहतर अनुभव के लिए कुकीज़ का उपयोग करते हैं। 
-           <a href="#privacy" onclick="showLegalPage('privacy')">पॉलिसी पढ़ें</a>
-        </p>
-        <button onclick="acceptCookies()" class="cookie-btn">Accept</button>
-    </div>
+<script type="module">
+    import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client/+esm";
 
-    <!-- 📌 Footer -->
-    <footer>
-        <div class="footer-links">
-            <a href="#privacy" onclick="showLegalPage('privacy')">Privacy Policy</a> | 
-            <a href="#terms" onclick="showLegalPage('terms')">Terms & Conditions</a> | 
-            <a href="#dmca" onclick="showLegalPage('dmca')">DMCA / Copyright</a> | 
-            <a href="mailto:vinsona9818@gmail.com">Contact Us</a>
-        </div>
-        <p class="disclaimer"><strong>डिस्क्लेमर (Disclaimer):</strong> Vinsona Media एक प्रमोशनल और एंटरटेनमेंट प्लेटफॉर्म है।</p>
-        <p class="copyright">&copy; 2026 Vinsona Media. All Rights Reserved.</p>
-    </footer>
+    // ब्राउज़र में डेटाबेस (IndexedDB) बनाना ताकि आवाज़ हमेशा सेव रहे
+    const dbName = "VoiceDatabase";
+    let db;
 
-    <!-- 📜 Legal Pages Modal -->
-    <div id="legal-modal" class="modal hidden">
-        <div class="modal-content legal-content">
-            <span class="close-modal" onclick="closeLegalPage()">&times;</span>
-            <div id="legal-text"></div>
-        </div>
-    </div>
+    const request = indexedDB.open(dbName, 1);
+    request.onupgradeneeded = function(e) {
+        db = e.target.result;
+        db.createObjectStore("voices", { keyPath: "name" });
+    };
+    request.onsuccess = function(e) {
+        db = e.target.result;
+        loadSavedVoices(); // वेबसाइट खुलते ही सेव की हुई आवाज़ें लोड होंगी
+    };
 
-    <button id="scrollTopBtn" title="ऊपर जाएं">▲</button>
+    // 1. आवाज़ को ब्राउज़र में हमेशा के लिए सेव करना
+    window.saveVoicePermanently = function() {
+        const name = document.getElementById('voiceName').value.trim();
+        const file = document.getElementById('voiceSample').files[0];
 
-    <script type="module" src="app.js"></script>
+        if(!name || !file) {
+            alert("कृपया नाम और ऑडियो फाइल दोनों दें!");
+            return;
+        }
+
+        const tx = db.transaction("voices", "readwrite");
+        const store = tx.objectStore("voices");
+        store.put({ name: name, file: file });
+
+        tx.oncomplete = function() {
+            alert(`'${name}' की आवाज़ हमेशा के लिए सेव हो गई है!`);
+            document.getElementById('voiceName').value = '';
+            document.getElementById('voiceSample').value = '';
+            loadSavedVoices();
+        };
+    };
+
+    // 2. सेव की हुई आवाज़ों को लिस्ट में दिखाना
+    function loadSavedVoices() {
+        const select = document.getElementById('voiceSelect');
+        select.innerHTML = '<option value="">-- अपनी सेव की हुई आवाज़ चुनें --</option>';
+
+        const tx = db.transaction("voices", "readonly");
+        const store = tx.objectStore("voices");
+        const req = store.getAllKeys();
+
+        req.onsuccess = function() {
+            req.result.forEach(voiceName => {
+                const option = document.createElement('option');
+                option.value = voiceName;
+                option.text = voiceName;
+                select.add(option);
+            });
+        };
+    }
+
+    // 3. टेक्स्ट से क्लोन ऑडियो जनरेट करना
+    window.generateAudio = function() {
+        const selectedVoice = document.getElementById('voiceSelect').value;
+        const text = document.getElementById('textToSpeech').value.trim();
+        const status = document.getElementById('status');
+
+        if(!selectedVoice || !text) {
+            alert("कृपया अपनी सेव की हुई आवाज़ चुनें और टेक्स्ट लिखें!");
+            return;
+        }
+
+        status.innerText = "⏳ ऑडियो बन रहा है, कृपया कुछ सेकंड इंतज़ार करें...";
+        document.getElementById('resultArea').style.display = 'none';
+
+        // डेटाबेस से ऑडियो फाइल निकालना
+        const tx = db.transaction("voices", "readonly");
+        const store = tx.objectStore("voices");
+        const req = store.get(selectedVoice);
+
+        req.onsuccess = async function() {
+            const voiceFile = req.result.file;
+
+            try {
+                const app = await client("coqui/XTTS-v2"); 
+                const result = await app.predict("/predict", [
+                    text,        // टेक्स्ट
+                    "hi",        // भाषा (Hindi)
+                    voiceFile,   // सेव की हुई आवाज़ की फाइल
+                    null,                       
+                    true                        
+                ]);
+
+                const audioUrl = result.data[0].url;
+                document.getElementById('audioPlayer').src = audioUrl;
+                document.getElementById('downloadBtn').href = audioUrl;
+                document.getElementById('resultArea').style.display = 'block';
+                status.innerText = "✅ ऑडियो तैयार हो गया!";
+
+            } catch (error) {
+                console.error(error);
+                status.innerText = "❌ एरर: ऑडियो जनरेट नहीं हो सका।";
+            }
+        };
+    };
+</script>
+
 </body>
 </html>
