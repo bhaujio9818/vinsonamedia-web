@@ -63,9 +63,11 @@
     </div>
 </div>
 
-<script>
+<script type="module">
+    import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client/+esm";
+
     const HF_TOKEN = "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";
-    const dbName = "VoiceDatabaseDirect";
+    const dbName = "VoiceDatabaseFixed";
     let db;
 
     const request = indexedDB.open(dbName, 1);
@@ -78,7 +80,7 @@
         loadSavedVoices();
     };
 
-    function saveVoicePermanently() {
+    window.saveVoicePermanently = function() {
         const name = document.getElementById('voiceName').value.trim();
         const file = document.getElementById('voiceSample').files[0];
 
@@ -87,21 +89,17 @@
             return;
         }
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const tx = db.transaction("voices", "readwrite");
-            const store = tx.objectStore("voices");
-            store.put({ name: name, audioData: e.target.result });
+        const tx = db.transaction("voices", "readwrite");
+        const store = tx.objectStore("voices");
+        store.put({ name: name, file: file });
 
-            tx.oncomplete = function() {
-                alert(`'${name}' की आवाज़ सफलतापूर्वक सेव हो गई है!`);
-                document.getElementById('voiceName').value = '';
-                document.getElementById('voiceSample').value = '';
-                loadSavedVoices();
-            };
+        tx.oncomplete = function() {
+            alert(`'${name}' की आवाज़ सफलतापूर्वक सेव हो गई है!`);
+            document.getElementById('voiceName').value = '';
+            document.getElementById('voiceSample').value = '';
+            loadSavedVoices();
         };
-        reader.readAsDataURL(file);
-    }
+    };
 
     function loadSavedVoices() {
         const select = document.getElementById('voiceSelect');
@@ -122,7 +120,7 @@
         };
     }
 
-    async function generateAudio() {
+    window.generateAudio = async function() {
         const selectedVoice = document.getElementById('voiceSelect').value;
         const text = document.getElementById('textToSpeech').value.trim();
         const status = document.getElementById('status');
@@ -140,48 +138,36 @@
         const req = store.get(selectedVoice);
 
         req.onsuccess = async function() {
-            const voiceData = req.result.audioData;
+            const voiceFile = req.result.file;
 
             try {
-                // HF Space API Request
-                const response = await fetch("https://coqui-xtts-v2.hf.space/run/predict", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${HF_TOKEN}`
-                    },
-                    body: JSON.stringify({
-                        data: [
-                            text,
-                            "hi",
-                            voiceData,
-                            null,
-                            true
-                        ]
-                    })
-                });
+                // Official Gradio Client Integration
+                const app = await client("coqui/XTTS-v2", { hf_token: HF_TOKEN });
+                
+                const result = await app.predict("/predict", [
+                    text,        // Text prompt
+                    "hi",        // Language code
+                    voiceFile,   // File object from IndexedDB
+                    null,        // Mic file
+                    false        // Use mic flag
+                ]);
 
-                const data = await response.json();
-                if (data && data.data && data.data[0]) {
-                    let audioUrl = data.data[0];
-                    if(typeof audioUrl === 'object' && audioUrl.url) {
-                        audioUrl = audioUrl.url;
-                    }
-                    
+                if (result && result.data && result.data[0]) {
+                    let audioUrl = result.data[0].url || result.data[0];
                     document.getElementById('audioPlayer').src = audioUrl;
                     document.getElementById('downloadBtn').href = audioUrl;
                     document.getElementById('resultArea').style.display = 'block';
                     status.innerText = "✅ ऑडियो सफलता से बन गया!";
                 } else {
-                    throw new Error("Invalid Response");
+                    throw new Error("Invalid output received");
                 }
 
             } catch (error) {
                 console.error(error);
-                status.innerText = "❌ एरर: सर्वर रिस्पॉन्स नहीं कर रहा है। कृपया थोड़ी देर बाद ट्राइ करें।";
+                status.innerText = "❌ एरर: सर्वर रिस्पॉन्स नहीं कर रहा है। कृपया दोबारा प्रयास करें।";
             }
         };
-    }
+    };
 </script>
 
 </body>
