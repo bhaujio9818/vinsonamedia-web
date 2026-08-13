@@ -3,172 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Permanent Voice Cloning Studio</title>
+    <title>Text to Speech Studio - Vinsona Media</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; }
-        .box { border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 20px; background: #fafafa; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; }
-        input[type="file"], input[type="text"], textarea, select { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; }
-        button:hover { background-color: #218838; }
-        .btn-gen { background-color: #007bff; }
-        .btn-gen:hover { background-color: #0056b3; }
-        #status { font-weight: bold; color: #555; text-align: center; margin: 10px 0; }
-        #resultArea { text-align: center; display: none; margin-top: 20px; }
-        audio { width: 100%; margin-top: 10px; }
-        .download-btn { display: inline-block; margin-top: 10px; padding: 10px 20px; background: #17a2b8; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        .iframe-container {
+            width: 100%;
+            max-width: 900px;
+            height: 650px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>🎤 Permanent Voice Cloning Studio</h2>
-
-    <!-- स्टेप 1: नई आवाज़ जोड़ना -->
-    <div class="box">
-        <h3>स्टेप 1: नई आवाज़ जोड़ें</h3>
-        <label>आवाज़ को नाम दें (उदा. Gulab Voice):</label>
-        <input type="text" id="voiceName" placeholder="यहाँ नाम लिखें...">
-
-        <label>अपनी आवाज़ का सैंपल अपलोड करें (MP3 / WAV):</label>
-        <input type="file" id="voiceSample" accept="audio/*">
-
-        <button onclick="saveVoicePermanently()">1. Voice Permanently Save करें</button>
+    <div class="header">
+        <h1>🎙️ Vinsona Media Voice Studio</h1>
     </div>
 
-    <!-- स्टेप 2: ऑडियो जनरेट करना -->
-    <div class="box">
-        <h3>स्टेप 2: टेक्स्ट से ऑडियो बनाएँ</h3>
-        <label>अपनी सेव की हुई आवाज़ चुनें:</label>
-        <select id="voiceSelect">
-            <option value="">-- अपनी सेव की हुई आवाज़ चुनें --</option>
-        </select>
-
-        <label>जो बुलवाना चाहते हैं वो टेक्स्ट लिखें:</label>
-        <textarea id="textToSpeech" rows="4" placeholder="यहाँ अपना टेक्स्ट लिखें..."></textarea>
-
-        <button class="btn-gen" onclick="generateAudio()">2. Unlimited Audio Generate करें</button>
+    <div class="iframe-container">
+        <!-- यहाँ src में अपना gradio.live वाला लिंक डालें -->
+        <iframe src="https://8cb1b38318b6f6b2f0.gradio.live"></iframe>
     </div>
-
-    <div id="status"></div>
-
-    <!-- स्टेप 3: आउटपुट डाउनलोड करना -->
-    <div id="resultArea" class="box">
-        <h3>आपकी आवाज़ तैयार है!</h3>
-        <audio id="audioPlayer" controls></audio>
-        <br>
-        <a id="downloadBtn" class="download-btn" download="cloned_voice.wav">📥 Audio File Download करें</a>
-    </div>
-</div>
-
-<script type="module">
-    import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client/+esm";
-
-    const HF_TOKEN = "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";
-    const dbName = "VoiceDatabaseFixed";
-    let db;
-
-    const request = indexedDB.open(dbName, 1);
-    request.onupgradeneeded = function(e) {
-        db = e.target.result;
-        db.createObjectStore("voices", { keyPath: "name" });
-    };
-    request.onsuccess = function(e) {
-        db = e.target.result;
-        loadSavedVoices();
-    };
-
-    window.saveVoicePermanently = function() {
-        const name = document.getElementById('voiceName').value.trim();
-        const file = document.getElementById('voiceSample').files[0];
-
-        if(!name || !file) {
-            alert("कृपया नाम और ऑडियो फाइल दोनों दें!");
-            return;
-        }
-
-        const tx = db.transaction("voices", "readwrite");
-        const store = tx.objectStore("voices");
-        store.put({ name: name, file: file });
-
-        tx.oncomplete = function() {
-            alert(`'${name}' की आवाज़ सफलतापूर्वक सेव हो गई है!`);
-            document.getElementById('voiceName').value = '';
-            document.getElementById('voiceSample').value = '';
-            loadSavedVoices();
-        };
-    };
-
-    function loadSavedVoices() {
-        const select = document.getElementById('voiceSelect');
-        select.innerHTML = '<option value="">-- अपनी सेव की हुई आवाज़ चुनें --</option>';
-
-        if(!db) return;
-        const tx = db.transaction("voices", "readonly");
-        const store = tx.objectStore("voices");
-        const req = store.getAllKeys();
-
-        req.onsuccess = function() {
-            req.result.forEach(voiceName => {
-                const option = document.createElement('option');
-                option.value = voiceName;
-                option.text = voiceName;
-                select.add(option);
-            });
-        };
-    }
-
-    window.generateAudio = async function() {
-        const selectedVoice = document.getElementById('voiceSelect').value;
-        const text = document.getElementById('textToSpeech').value.trim();
-        const status = document.getElementById('status');
-
-        if(!selectedVoice || !text) {
-            alert("कृपया अपनी सेव की हुई आवाज़ चुनें और टेक्स्ट लिखें!");
-            return;
-        }
-
-        status.innerText = "⏳ ऑडियो जनरेट हो रहा है, कृपया 10-15 सेकंड इंतज़ार करें...";
-        document.getElementById('resultArea').style.display = 'none';
-
-        const tx = db.transaction("voices", "readonly");
-        const store = tx.objectStore("voices");
-        const req = store.get(selectedVoice);
-
-        req.onsuccess = async function() {
-            const voiceFile = req.result.file;
-
-            try {
-                // Official Gradio Client Integration
-                const app = await client("coqui/XTTS-v2", { hf_token: HF_TOKEN });
-                
-                const result = await app.predict("/predict", [
-                    text,        // Text prompt
-                    "hi",        // Language code
-                    voiceFile,   // File object from IndexedDB
-                    null,        // Mic file
-                    false        // Use mic flag
-                ]);
-
-                if (result && result.data && result.data[0]) {
-                    let audioUrl = result.data[0].url || result.data[0];
-                    document.getElementById('audioPlayer').src = audioUrl;
-                    document.getElementById('downloadBtn').href = audioUrl;
-                    document.getElementById('resultArea').style.display = 'block';
-                    status.innerText = "✅ ऑडियो सफलता से बन गया!";
-                } else {
-                    throw new Error("Invalid output received");
-                }
-
-            } catch (error) {
-                console.error(error);
-                status.innerText = "❌ एरर: सर्वर रिस्पॉन्स नहीं कर रहा है। कृपया दोबारा प्रयास करें।";
-            }
-        };
-    };
-</script>
 
 </body>
 </html>
