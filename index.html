@@ -32,7 +32,7 @@
         <label>आवाज़ को नाम दें (उदा. Gulab Voice):</label>
         <input type="text" id="voiceName" placeholder="यहाँ नाम लिखें...">
 
-        <label>अपनी आवाज़ का सैंपल अपलोड करें:</label>
+        <label>अपनी आवाज़ का सैंपल अपलोड करें (WAV / MP3):</label>
         <input type="file" id="voiceSample" accept="audio/*">
 
         <button onclick="saveVoicePermanently()">1. Voice Permanently Save करें</button>
@@ -66,7 +66,6 @@
 <script type="module">
     import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client/+esm";
 
-    // ब्राउज़र में डेटाबेस (IndexedDB) बनाना ताकि आवाज़ हमेशा सेव रहे
     const dbName = "VoiceDatabase";
     let db;
 
@@ -77,10 +76,9 @@
     };
     request.onsuccess = function(e) {
         db = e.target.result;
-        loadSavedVoices(); // वेबसाइट खुलते ही सेव की हुई आवाज़ें लोड होंगी
+        loadSavedVoices();
     };
 
-    // 1. आवाज़ को ब्राउज़र में हमेशा के लिए सेव करना
     window.saveVoicePermanently = function() {
         const name = document.getElementById('voiceName').value.trim();
         const file = document.getElementById('voiceSample').files[0];
@@ -95,14 +93,13 @@
         store.put({ name: name, file: file });
 
         tx.oncomplete = function() {
-            alert(`'${name}' की आवाज़ हमेशा के लिए सेव हो गई है!`);
+            alert(`'${name}' की आवाज़ सफलतापूर्वक सेव हो गई है!`);
             document.getElementById('voiceName').value = '';
             document.getElementById('voiceSample').value = '';
             loadSavedVoices();
         };
     };
 
-    // 2. सेव की हुई आवाज़ों को लिस्ट में दिखाना
     function loadSavedVoices() {
         const select = document.getElementById('voiceSelect');
         select.innerHTML = '<option value="">-- अपनी सेव की हुई आवाज़ चुनें --</option>';
@@ -121,7 +118,6 @@
         };
     }
 
-    // 3. टेक्स्ट से क्लोन ऑडियो जनरेट करना
     window.generateAudio = function() {
         const selectedVoice = document.getElementById('voiceSelect').value;
         const text = document.getElementById('textToSpeech').value.trim();
@@ -132,10 +128,9 @@
             return;
         }
 
-        status.innerText = "⏳ ऑडियो बन रहा है, कृपया कुछ सेकंड इंतज़ार करें...";
+        status.innerText = "⏳ ऑडियो बन रहा है, कृपया 10-15 सेकंड इंतज़ार करें...";
         document.getElementById('resultArea').style.display = 'none';
 
-        // डेटाबेस से ऑडियो फाइल निकालना
         const tx = db.transaction("voices", "readonly");
         const store = tx.objectStore("voices");
         const req = store.get(selectedVoice);
@@ -144,15 +139,18 @@
             const voiceFile = req.result.file;
 
             try {
-                // यहाँ आपका नया Hugging Face स्पेस कनेक्ट कर दिया है
-                const app = await client("ram9818/neha"); 
-                const result = await app.predict("/predict", [
-                    text,        // टेक्स्ट
-                    "hi",        // भाषा (Hindi)
-                    voiceFile,   // सेव की हुई आवाज़ की फाइल
-                    null,                       
-                    true                        
-                ]);
+                // XTTS v2 का पब्लिक एक्टिव एपीआई कनेक्ट कर रहे हैं
+                const app = await client("coqui/XTTS-v2"); 
+                const result = await app.predict("/predict", {
+                    prompt: text,
+                    language: "hi",
+                    audio_file_pth: voiceFile,
+                    mic_file_path: null,
+                    use_mic: false,
+                    voice_cleanup: true,
+                    no_lang_auto_detect: false,
+                    agree: true
+                });
 
                 const audioUrl = result.data[0].url;
                 document.getElementById('audioPlayer').src = audioUrl;
@@ -162,7 +160,7 @@
 
             } catch (error) {
                 console.error(error);
-                status.innerText = "❌ एरर: ऑडियो जनरेट नहीं हो सका।";
+                status.innerText = "❌ एरर: सर्वर व्यस्त है या रिस्पॉन्स नहीं मिला। कृपया दोबारा कोशिश करें।";
             }
         };
     };
