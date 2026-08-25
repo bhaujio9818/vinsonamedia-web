@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vinsona Multi-Tools Hub</title>
+  <title>Vinsona Media - Multi-Utility Finance & Creator Tools</title>
+  <meta name="description" content="Free online utility tools for finance, SIP calculation, EMI planning, GST calculation, creator content formatting, and browser-based image compression." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
@@ -15,14 +16,14 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background-color: #0f172a;
+      background-color: #0b1120;
       color: #f8fafc;
     }
     .wrapper-center {
       flex: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 24px 16px;
       width: 100%;
     }
@@ -41,7 +42,7 @@
 <body>
 
   <!-- Top Navigation Header -->
-  <header class="w-full border-b border-slate-800 bg-slate-900/95 sticky top-0 z-50">
+  <header class="w-full border-b border-slate-800 bg-slate-900/95 sticky top-0 z-50 backdrop-blur">
     <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center space-x-2">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-extrabold text-white shadow-lg">V</div>
@@ -58,15 +59,15 @@
     </div>
   </header>
 
-  <!-- Strict Center Wrapper -->
+  <!-- Centered Main Content Area -->
   <main class="wrapper-center">
     <div class="center-card">
 
       <!-- 1. SIP CALCULATOR -->
       <section id="section-sip" class="block w-full">
         <div class="text-center mb-6">
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">SIP & Wealth Calculator</h2>
-          <p class="text-slate-400 text-xs md:text-sm mt-1">Monthly compounding investment returns</p>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-white">SIP & Wealth Calculator</h1>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Estimate the future value of your periodic investments with compound interest growth.</p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-6 bg-slate-800/80 border border-slate-700/60 p-6 md:p-8 rounded-2xl shadow-2xl">
@@ -87,7 +88,7 @@
             </div>
             <div>
               <div class="flex justify-between text-xs font-semibold mb-2">
-                <span class="text-slate-300">Time Period</span>
+                <span class="text-slate-300">Investment Duration</span>
                 <span id="sipYearsVal" class="text-indigo-400 font-bold">10 Years</span>
               </div>
               <input type="range" id="sipYears" min="1" max="35" step="1" value="10" class="w-full accent-indigo-500 cursor-pointer h-2 bg-slate-700 rounded-lg" />
@@ -97,11 +98,11 @@
           <div class="bg-slate-900/90 rounded-xl p-6 border border-slate-800 flex flex-col justify-between space-y-4">
             <div class="space-y-3 text-sm">
               <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
-                <span class="text-slate-400">Total Invested</span>
+                <span class="text-slate-400">Total Invested Amount</span>
                 <span id="sipTotalInvested" class="font-bold text-white text-base">₹6,00,000</span>
               </div>
               <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
-                <span class="text-slate-400">Estimated Returns</span>
+                <span class="text-slate-400">Estimated Profit (Wealth Gained)</span>
                 <span id="sipEstReturns" class="font-bold text-emerald-400 text-base">₹5,61,695</span>
               </div>
             </div>
@@ -111,20 +112,30 @@
             </div>
           </div>
         </div>
+
+        <!-- AdSense Content Body -->
+        <article class="mt-8 bg-slate-800/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-4 text-slate-300 text-xs md:text-sm leading-relaxed">
+          <h2 class="text-base md:text-lg font-bold text-white">How Systematic Investment Plans (SIP) Work</h2>
+          <p>A Systematic Investment Plan (SIP) allows individuals to invest small, fixed amounts of money periodically into mutual funds or market instruments. Through rupee-cost averaging and compounding growth, long-term investors benefit significantly over market volatility.</p>
+          
+          <h3 class="text-sm font-bold text-indigo-300 mt-3">The Compounding Formula</h3>
+          <p class="font-mono bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-slate-200">M = P × ({[1 + i]^n - 1} / i) × (1 + i)</p>
+          <p class="text-xs text-slate-400">Where <strong>M</strong> is total returns, <strong>P</strong> is monthly deposit, <strong>i</strong> is monthly interest rate, and <strong>n</strong> is total months.</p>
+        </article>
       </section>
 
       <!-- 2. LOAN & EMI CALCULATOR -->
       <section id="section-loan" class="hidden w-full">
         <div class="text-center mb-6">
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Loan & EMI Calculator</h2>
-          <p class="text-slate-400 text-xs md:text-sm mt-1">Monthly EMI aur Interest payment calculate karein</p>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-white">Loan & EMI Calculator</h1>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Calculate monthly equated installments and interest breakdown accurately.</p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-6 bg-slate-800/80 border border-slate-700/60 p-6 md:p-8 rounded-2xl shadow-2xl">
           <div class="space-y-5">
             <div>
               <div class="flex justify-between text-xs font-semibold mb-2">
-                <span class="text-slate-300">Loan Amount</span>
+                <span class="text-slate-300">Loan Principal</span>
                 <span id="loanAmtVal" class="text-indigo-400 font-bold">₹5,00,000</span>
               </div>
               <input type="range" id="loanAmt" min="10000" max="5000000" step="10000" value="500000" class="w-full accent-indigo-500 cursor-pointer h-2 bg-slate-700 rounded-lg" />
@@ -138,7 +149,7 @@
             </div>
             <div>
               <div class="flex justify-between text-xs font-semibold mb-2">
-                <span class="text-slate-300">Loan Tenure</span>
+                <span class="text-slate-300">Tenure (Duration)</span>
                 <span id="loanTenureVal" class="text-indigo-400 font-bold">5 Years</span>
               </div>
               <input type="range" id="loanTenure" min="1" max="30" step="1" value="5" class="w-full accent-indigo-500 cursor-pointer h-2 bg-slate-700 rounded-lg" />
@@ -148,15 +159,15 @@
           <div class="bg-slate-900/90 rounded-xl p-6 border border-slate-800 flex flex-col justify-between space-y-4">
             <div class="space-y-2 text-sm">
               <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
-                <span class="text-slate-400">Principal</span>
+                <span class="text-slate-400">Principal Borrowed</span>
                 <span id="loanPrincipal" class="font-bold text-white">₹5,00,000</span>
               </div>
               <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
-                <span class="text-slate-400">Total Interest</span>
+                <span class="text-slate-400">Total Interest Charge</span>
                 <span id="loanTotalInterest" class="font-bold text-rose-400">₹1,44,795</span>
               </div>
               <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
-                <span class="text-slate-400">Total Payable</span>
+                <span class="text-slate-400">Total Payable Amount</span>
                 <span id="loanTotalPayment" class="font-bold text-slate-200">₹6,44,795</span>
               </div>
             </div>
@@ -166,33 +177,39 @@
             </div>
           </div>
         </div>
+
+        <!-- AdSense Content Body -->
+        <article class="mt-8 bg-slate-800/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-4 text-slate-300 text-xs md:text-sm leading-relaxed">
+          <h2 class="text-base md:text-lg font-bold text-white">Understanding Equated Monthly Installments (EMI)</h2>
+          <p>An EMI is a fixed monthly payment provided by a borrower to a lender on a specified date. Each payment includes components of both principal repayment and interest charges. Using a standard reducing-balance method, the interest portion gradually decreases as the principal is paid down.</p>
+        </article>
       </section>
 
       <!-- 3. GST & PROFIT CALCULATOR -->
       <section id="section-gst" class="hidden w-full">
         <div class="text-center mb-6">
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">GST & Profit Margin Calculator</h2>
-          <p class="text-slate-400 text-xs md:text-sm mt-1">Cost, margin aur GST ke sath MRP nikaalein</p>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-white">GST & Profit Margin Calculator</h1>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Determine final pricing, profit spreads, and tax obligations for retail & e-commerce.</p>
         </div>
 
         <div class="max-w-lg mx-auto bg-slate-800/80 border border-slate-700/60 p-6 md:p-8 rounded-2xl space-y-4 shadow-2xl">
           <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Cost Price (₹)</label>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Base Cost Price (₹)</label>
             <input type="number" id="gstCost" placeholder="e.g. 500" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Margin (%)</label>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Target Margin (%)</label>
               <input type="number" id="gstMargin" placeholder="e.g. 20" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">GST Rate (%)</label>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">GST Tax Slab (%)</label>
               <select id="gstRate" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500">
-                <option value="0">0%</option>
-                <option value="5">5%</option>
-                <option value="12">12%</option>
-                <option value="18" selected>18%</option>
-                <option value="28">28%</option>
+                <option value="0">0% (Exempt)</option>
+                <option value="5">5% (Essential)</option>
+                <option value="12">12% (Standard)</option>
+                <option value="18" selected>18% (Services/Goods)</option>
+                <option value="28">28% (Luxury/Demerit)</option>
               </select>
             </div>
           </div>
@@ -200,54 +217,59 @@
           <div class="pt-4 border-t border-slate-700/60 space-y-3">
             <div class="grid grid-cols-2 gap-3">
               <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                <span class="text-xs text-slate-400 block">Profit</span>
+                <span class="text-xs text-slate-400 block">Gross Profit</span>
                 <span id="gstProfitRes" class="text-base font-bold text-emerald-400">₹0.00</span>
               </div>
               <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                <span class="text-xs text-slate-400 block">GST Tax</span>
+                <span class="text-xs text-slate-400 block">Tax Liability (GST)</span>
                 <span id="gstTaxRes" class="text-base font-bold text-indigo-400">₹0.00</span>
               </div>
             </div>
             <div class="p-4 bg-indigo-600 rounded-xl text-white flex justify-between items-center shadow-lg">
               <div>
-                <span class="text-xs text-indigo-200 block">Final Price (MRP)</span>
+                <span class="text-xs text-indigo-200 block">Final Selling Price (MRP)</span>
                 <span id="gstFinalRes" class="text-2xl font-extrabold">₹0.00</span>
               </div>
             </div>
           </div>
         </div>
+
+        <article class="mt-8 bg-slate-800/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-3 text-slate-300 text-xs md:text-sm leading-relaxed">
+          <h2 class="text-base md:text-lg font-bold text-white">How GST & Profit Margins Are Calculated</h2>
+          <p>Proper inventory pricing requires combining cost recovery, desired profit margins, and applicable GST taxation. Setting accurate pricing ensures that sales cover procurement expenses while meeting legal tax compliance standards without eroding business margins.</p>
+        </article>
       </section>
 
       <!-- 4. BABYLON 70-20-10 TOOL -->
       <section id="section-babylon" class="hidden w-full">
         <div class="text-center mb-6">
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Babylon 70-20-10 Financial Tool</h2>
-          <p class="text-slate-400 text-xs md:text-sm mt-1">70% Kharch, 20% Karz Mukti, 10% Wealth</p>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-white">Babylon 70-20-10 Wealth & Debt Framework</h1>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Structured allocation: 70% Living Expenses, 20% Debt Amortization, 10% Wealth Building.</p>
         </div>
 
         <div class="max-w-xl mx-auto bg-slate-800/80 border border-slate-700/60 p-6 md:p-8 rounded-2xl space-y-5 shadow-2xl">
           <div class="grid md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Monthly Income (₹)</label>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Monthly Net Income (₹)</label>
               <input type="number" id="babylonIncome" placeholder="e.g. 50000" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total Debt (₹)</label>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total Outstanding Debt (₹)</label>
               <input type="number" id="babylonDebt" placeholder="e.g. 100000" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
           </div>
 
           <div class="grid grid-cols-3 gap-2 pt-2">
             <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-center">
-              <span class="text-[11px] font-semibold text-amber-400 block uppercase">70% Expense</span>
+              <span class="text-[11px] font-semibold text-amber-400 block uppercase">70% Living</span>
               <span id="babylonLiving" class="text-base md:text-lg font-bold text-white mt-1 block">₹0</span>
             </div>
             <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-center">
-              <span class="text-[11px] font-semibold text-rose-400 block uppercase">20% Debt</span>
+              <span class="text-[11px] font-semibold text-rose-400 block uppercase">20% Debt Payoff</span>
               <span id="babylonDebtPay" class="text-base md:text-lg font-bold text-white mt-1 block">₹0</span>
             </div>
             <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-center">
-              <span class="text-[11px] font-semibold text-emerald-400 block uppercase">10% Wealth</span>
+              <span class="text-[11px] font-semibold text-emerald-400 block uppercase">10% Retention</span>
               <span id="babylonSavings" class="text-base md:text-lg font-bold text-white mt-1 block">₹0</span>
             </div>
           </div>
@@ -257,17 +279,22 @@
             <span id="babylonMonthsRes" class="text-2xl font-extrabold text-indigo-400 mt-1 block">0 Months</span>
           </div>
         </div>
+
+        <article class="mt-8 bg-slate-800/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-3 text-slate-300 text-xs md:text-sm leading-relaxed">
+          <h2 class="text-base md:text-lg font-bold text-white">The Principles of the Babylonian Budget</h2>
+          <p>Inspired by classical financial management literature, the 70-20-10 rule establishes a clear boundary between living within 70% of current revenue, allocating 20% to eliminate obligations systematically, and keeping 10% strictly for long-term equity growth.</p>
+        </article>
       </section>
 
       <!-- 5. CREATOR TOOLS -->
       <section id="section-creator" class="hidden w-full">
         <div class="text-center mb-6">
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Caption & Hook Formatter</h2>
-          <p class="text-slate-400 text-xs md:text-sm mt-1">Text clean karein aur viral hooks banayein</p>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-white">Social Media Caption & Hook Formatter</h1>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Clean line-breaks, bullet points, and character count tracking for Instagram & YouTube.</p>
         </div>
 
         <div class="max-w-xl mx-auto bg-slate-800/80 border border-slate-700/60 p-6 rounded-2xl space-y-4 shadow-2xl">
-          <textarea id="creatorText" rows="6" placeholder="Apna text ya caption paste karein..." class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500 text-sm"></textarea>
+          <textarea id="creatorText" rows="6" placeholder="Paste your caption, script hooks, or tags here..." class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500 text-sm"></textarea>
           
           <div class="flex flex-wrap gap-2">
             <button onclick="cleanSpaces()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg transition">Clean Lines</button>
@@ -281,13 +308,18 @@
             <span id="wordCount">Words: 0</span>
           </div>
         </div>
+
+        <article class="mt-8 bg-slate-800/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-3 text-slate-300 text-xs md:text-sm leading-relaxed">
+          <h2 class="text-base md:text-lg font-bold text-white">Optimizing Text Layout for Reader Engagement</h2>
+          <p>Short-form video descriptions and social captions perform better when structured with clean spacing, readable bullet lists, and concise length. This prevents the text from collapsing into unreadable blocks across different mobile devices.</p>
+        </article>
       </section>
 
       <!-- 6. IMAGE COMPRESSOR -->
       <section id="section-image" class="hidden w-full">
         <div class="text-center mb-6">
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Image Compressor</h2>
-          <p class="text-slate-400 text-xs md:text-sm mt-1">Browser ke andar images optimize karein</p>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-white">Client-side Image Compressor</h1>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Optimize and resize images directly in your browser. 100% private with no server uploads.</p>
         </div>
 
         <div class="max-w-lg mx-auto bg-slate-800/80 border border-slate-700/60 p-6 rounded-2xl space-y-4 shadow-2xl">
@@ -299,7 +331,7 @@
               <input type="number" id="imgWidth" value="1200" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none text-sm" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Quality</label>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Quality Level</label>
               <input type="range" id="imgQuality" min="0.1" max="1.0" step="0.05" value="0.75" class="w-full accent-indigo-500 cursor-pointer mt-2" />
             </div>
           </div>
@@ -309,16 +341,34 @@
           <div id="imagePreviewBox" class="hidden pt-4 border-t border-slate-700 space-y-3 text-center">
             <img id="previewImg" class="max-h-48 mx-auto rounded-lg border border-slate-700 object-contain" />
             <div class="text-xs text-slate-400" id="imgSizeDetails"></div>
-            <a id="downloadBtn" download="compressed.jpg" class="inline-block px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-xs font-bold rounded-lg text-white transition">Download Image</a>
+            <a id="downloadBtn" download="compressed.jpg" class="inline-block px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-xs font-bold rounded-lg text-white transition">Download Compressed Image</a>
           </div>
         </div>
+
+        <article class="mt-8 bg-slate-800/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-3 text-slate-300 text-xs md:text-sm leading-relaxed">
+          <h2 class="text-base md:text-lg font-bold text-white">Browser-Based Processing & Data Privacy</h2>
+          <p>This image compression utility uses the native HTML5 Canvas API within your local browser. Your media files are never transmitted to external cloud servers or stored in remote databases, ensuring complete data security and speed.</p>
+        </article>
       </section>
 
     </div>
   </main>
 
-  <footer class="py-4 text-center text-xs text-slate-600 border-t border-slate-800">
-    © Vinsona Media Tools. Built for performance.
+  <!-- Google AdSense Compliant Footer -->
+  <footer class="w-full py-8 text-center text-xs text-slate-500 border-t border-slate-800 bg-slate-950/80 mt-auto">
+    <div class="max-w-4xl mx-auto px-4 space-y-3">
+      <div class="flex flex-wrap justify-center gap-6 text-slate-400 font-medium">
+        <a href="#about" class="hover:text-indigo-400 transition">About Us</a>
+        <a href="#privacy" class="hover:text-indigo-400 transition">Privacy Policy</a>
+        <a href="#terms" class="hover:text-indigo-400 transition">Terms of Service</a>
+        <a href="#disclaimer" class="hover:text-indigo-400 transition">Financial Disclaimer</a>
+        <a href="#contact" class="hover:text-indigo-400 transition">Contact</a>
+      </div>
+      <p class="text-[11px] leading-relaxed max-w-2xl mx-auto text-slate-600">
+        <strong>Disclaimer:</strong> The calculators and utilities provided on this website are for educational and informational purposes only. Results are estimates based on user inputs and standard mathematical models and should not be considered certified legal, financial, or tax advice.
+      </p>
+      <p class="text-[11px] text-slate-600">© 2026 Vinsona Media Tools Hub. All rights reserved.</p>
+    </div>
   </footer>
 
   <script>
@@ -361,7 +411,7 @@
     [sipAmt, sipRate, sipYears].forEach(el => el.addEventListener('input', calculateSIP));
     calculateSIP();
 
-    // Loan
+    // Loan / EMI
     const loanAmt = document.getElementById('loanAmt');
     const loanRate = document.getElementById('loanRate');
     const loanTenure = document.getElementById('loanTenure');
@@ -459,7 +509,7 @@
     // Image
     function processImage() {
       const file = document.getElementById('imageInput').files[0];
-      if (!file) return alert('Pehle image select karein!');
+      if (!file) return alert('Please choose an image file first.');
 
       const maxW = parseInt(document.getElementById('imgWidth').value) || 1200;
       const quality = parseFloat(document.getElementById('imgQuality').value) || 0.75;
@@ -492,7 +542,7 @@
 
           const origSize = (file.size / 1024).toFixed(1);
           const newSize = (compressedDataUrl.length * (3/4) / 1024).toFixed(1);
-          document.getElementById('imgSizeDetails').textContent = `Original: ${origSize} KB | Compressed: ~${newSize} KB (${width}x${height}px)`;
+          document.getElementById('imgSizeDetails').textContent = `Original: ${origSize} KB | Optimized: ~${newSize} KB (${width}x${height}px)`;
         };
         img.src = e.target.result;
       };
