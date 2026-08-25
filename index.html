@@ -25,11 +25,12 @@
         <span class="font-extrabold text-xl tracking-tight text-white">Vinsona<span class="text-indigo-400">Media</span></span>
       </div>
       <nav class="flex flex-wrap gap-1 bg-slate-800/80 p-1 rounded-xl">
-        <button onclick="switchTab('sip')" id="tab-sip" class="tab-btn active px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition">SIP</button>
-        <button onclick="switchTab('gst')" id="tab-gst" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">GST & Profit</button>
-        <button onclick="switchTab('babylon')" id="tab-babylon" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Babylon 70-20-10</button>
-        <button onclick="switchTab('creator')" id="tab-creator" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Creator Tool</button>
-        <button onclick="switchTab('image')" id="tab-image" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Image Compressor</button>
+        <button onclick="switchTab('sip')" id="tab-sip" class="tab-btn active px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition">SIP</button>
+        <button onclick="switchTab('loan')" id="tab-loan" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Loan / EMI</button>
+        <button onclick="switchTab('gst')" id="tab-gst" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">GST & Profit</button>
+        <button onclick="switchTab('babylon')" id="tab-babylon" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Babylon 70-20-10</button>
+        <button onclick="switchTab('creator')" id="tab-creator" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Creator Tool</button>
+        <button onclick="switchTab('image')" id="tab-image" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Image Compressor</button>
       </nav>
     </div>
   </header>
@@ -87,7 +88,62 @@
       </div>
     </section>
 
-    <!-- 2. GST & PROFIT CALCULATOR -->
+    <!-- 2. LOAN & EMI CALCULATOR -->
+    <section id="section-loan" class="hidden">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-white">Loan & EMI Calculator</h2>
+        <p class="text-slate-400 text-xs mt-1">Home loan, personal loan ya bike/car loan ki monthly EMI calculate karein.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 bg-slate-800/60 border border-slate-800 p-6 rounded-2xl">
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span class="text-slate-300">Loan Amount (₹)</span>
+              <span id="loanAmtVal" class="text-indigo-400">₹5,00,000</span>
+            </div>
+            <input type="range" id="loanAmt" min="10000" max="5000000" step="10000" value="500000" class="w-full accent-indigo-500 cursor-pointer" />
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span class="text-slate-300">Interest Rate (% p.a.)</span>
+              <span id="loanRateVal" class="text-indigo-400">10.5%</span>
+            </div>
+            <input type="range" id="loanRate" min="5" max="25" step="0.1" value="10.5" class="w-full accent-indigo-500 cursor-pointer" />
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span class="text-slate-300">Loan Tenure (Years)</span>
+              <span id="loanTenureVal" class="text-indigo-400">5 Years</span>
+            </div>
+            <input type="range" id="loanTenure" min="1" max="30" step="1" value="5" class="w-full accent-indigo-500 cursor-pointer" />
+          </div>
+        </div>
+
+        <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 flex flex-col justify-between space-y-4">
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between py-1 border-b border-slate-800">
+              <span class="text-slate-400">Principal Amount</span>
+              <span id="loanPrincipal" class="font-bold text-white">₹5,00,000</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-800">
+              <span class="text-slate-400">Total Interest Payable</span>
+              <span id="loanTotalInterest" class="font-bold text-rose-400">₹1,44,795</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-800">
+              <span class="text-slate-400">Total Payment (Principal + Int)</span>
+              <span id="loanTotalPayment" class="font-bold text-slate-200">₹6,44,795</span>
+            </div>
+          </div>
+          <div class="p-4 bg-indigo-950/60 border border-indigo-500/30 rounded-lg">
+            <span class="text-xs text-indigo-300 uppercase tracking-wider font-semibold block">Monthly Loan EMI</span>
+            <span id="loanEmiDisplay" class="text-2xl font-extrabold text-indigo-400 mt-1 block">₹10,747</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. GST & PROFIT CALCULATOR -->
     <section id="section-gst" class="hidden">
       <div class="text-center mb-6">
         <h2 class="text-2xl font-bold text-white">GST & Profit Margin Calculator</h2>
@@ -137,7 +193,7 @@
       </div>
     </section>
 
-    <!-- 3. BABYLON 70-20-10 DEBT & BUDGET TOOL -->
+    <!-- 4. BABYLON 70-20-10 DEBT & BUDGET TOOL -->
     <section id="section-babylon" class="hidden">
       <div class="text-center mb-6">
         <h2 class="text-2xl font-bold text-white">Babylon 70-20-10 Financial Tool</h2>
@@ -181,7 +237,7 @@
       </div>
     </section>
 
-    <!-- 4. CREATOR TOOLS -->
+    <!-- 5. CREATOR TOOLS -->
     <section id="section-creator" class="hidden">
       <div class="text-center mb-6">
         <h2 class="text-2xl font-bold text-white">Social Media Caption & Hook Formatter</h2>
@@ -205,7 +261,7 @@
       </div>
     </section>
 
-    <!-- 5. CLIENT-SIDE IMAGE RESIZER & COMPRESSOR -->
+    <!-- 6. CLIENT-SIDE IMAGE RESIZER & COMPRESSOR -->
     <section id="section-image" class="hidden">
       <div class="text-center mb-6">
         <h2 class="text-2xl font-bold text-white">Client-side Image Compressor</h2>
@@ -241,7 +297,7 @@
   <script>
     // Tab Navigation
     function switchTab(tab) {
-      const tabs = ['sip', 'gst', 'babylon', 'creator', 'image'];
+      const tabs = ['sip', 'loan', 'gst', 'babylon', 'creator', 'image'];
       tabs.forEach(t => {
         document.getElementById(`section-${t}`).classList.add('hidden');
         document.getElementById(`tab-${t}`).classList.remove('active', 'text-white');
@@ -279,7 +335,33 @@
     [sipAmt, sipRate, sipYears].forEach(el => el.addEventListener('input', calculateSIP));
     calculateSIP();
 
-    // 2. GST Calculator
+    // 2. Loan / EMI Calculator
+    const loanAmt = document.getElementById('loanAmt');
+    const loanRate = document.getElementById('loanRate');
+    const loanTenure = document.getElementById('loanTenure');
+
+    function calculateLoan() {
+      const p = parseFloat(loanAmt.value);
+      const r = parseFloat(loanRate.value) / 12 / 100;
+      const n = parseFloat(loanTenure.value) * 12;
+
+      document.getElementById('loanAmtVal').textContent = '₹' + p.toLocaleString('en-IN');
+      document.getElementById('loanRateVal').textContent = loanRate.value + '%';
+      document.getElementById('loanTenureVal').textContent = loanTenure.value + ' Years';
+
+      const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      const totalPayment = emi * n;
+      const totalInterest = totalPayment - p;
+
+      document.getElementById('loanPrincipal').textContent = '₹' + Math.round(p).toLocaleString('en-IN');
+      document.getElementById('loanTotalInterest').textContent = '₹' + Math.round(totalInterest).toLocaleString('en-IN');
+      document.getElementById('loanTotalPayment').textContent = '₹' + Math.round(totalPayment).toLocaleString('en-IN');
+      document.getElementById('loanEmiDisplay').textContent = '₹' + Math.round(emi).toLocaleString('en-IN');
+    }
+    [loanAmt, loanRate, loanTenure].forEach(el => el.addEventListener('input', calculateLoan));
+    calculateLoan();
+
+    // 3. GST Calculator
     const gstCost = document.getElementById('gstCost');
     const gstMargin = document.getElementById('gstMargin');
     const gstRate = document.getElementById('gstRate');
@@ -300,7 +382,7 @@
     }
     [gstCost, gstMargin, gstRate].forEach(el => el.addEventListener('input', calculateGST));
 
-    // 3. Babylon 70-20-10 Tool
+    // 4. Babylon 70-20-10 Tool
     const babylonIncome = document.getElementById('babylonIncome');
     const babylonDebt = document.getElementById('babylonDebt');
 
@@ -326,7 +408,7 @@
     }
     [babylonIncome, babylonDebt].forEach(el => el.addEventListener('input', calculateBabylon));
 
-    // 4. Creator Tools
+    // 5. Creator Tools
     const creatorText = document.getElementById('creatorText');
     creatorText.addEventListener('input', () => {
       const val = creatorText.value;
@@ -348,7 +430,7 @@
       navigator.clipboard.writeText(creatorText.value);
     }
 
-    // 5. Image Resizer & Compressor (Pure Canvas API)
+    // 6. Image Resizer & Compressor
     function processImage() {
       const file = document.getElementById('imageInput').files[0];
       if (!file) return alert('Pehle image select karein!');
