@@ -7,295 +7,321 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    * { box-sizing: border-box; }
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    .wrapper-center {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      width: 100%;
+    }
+    .center-card {
+      width: 100%;
+      max-width: 850px;
+      margin: 0 auto;
+    }
     .tab-btn.active {
-      background-color: #4f46e5;
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+      background-color: #4f46e5 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
     }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen">
+<body>
 
-  <!-- Header & Navigation -->
-  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+  <!-- Top Navigation Header -->
+  <header class="w-full border-b border-slate-800 bg-slate-900/95 sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center space-x-2">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-extrabold text-white shadow-lg shadow-indigo-500/30">V</div>
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-extrabold text-white shadow-lg">V</div>
         <span class="font-extrabold text-xl tracking-tight text-white">Vinsona<span class="text-indigo-400">Media</span></span>
       </div>
-      <nav class="flex flex-wrap gap-1 bg-slate-800/80 p-1 rounded-xl">
-        <button onclick="switchTab('sip')" id="tab-sip" class="tab-btn active px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition">SIP</button>
-        <button onclick="switchTab('loan')" id="tab-loan" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Loan / EMI</button>
-        <button onclick="switchTab('gst')" id="tab-gst" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">GST & Profit</button>
-        <button onclick="switchTab('babylon')" id="tab-babylon" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Babylon 70-20-10</button>
-        <button onclick="switchTab('creator')" id="tab-creator" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Creator Tool</button>
-        <button onclick="switchTab('image')" id="tab-image" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Image Compressor</button>
+      <nav class="flex flex-wrap gap-1 bg-slate-800/90 p-1.5 rounded-xl">
+        <button onclick="switchTab('sip')" id="tab-sip" class="tab-btn active px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition">SIP</button>
+        <button onclick="switchTab('loan')" id="tab-loan" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Loan / EMI</button>
+        <button onclick="switchTab('gst')" id="tab-gst" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">GST & Profit</button>
+        <button onclick="switchTab('babylon')" id="tab-babylon" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Babylon 70-20-10</button>
+        <button onclick="switchTab('creator')" id="tab-creator" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Creator Tool</button>
+        <button onclick="switchTab('image')" id="tab-image" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white transition">Compressor</button>
       </nav>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-4 py-8">
+  <!-- Strict Center Wrapper -->
+  <main class="wrapper-center">
+    <div class="center-card">
 
-    <!-- 1. SIP CALCULATOR -->
-    <section id="section-sip" class="block">
-      <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-white">SIP & Wealth Calculator</h2>
-        <p class="text-slate-400 text-xs mt-1">Monthly compounding investment calculator.</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-6 bg-slate-800/60 border border-slate-800 p-6 rounded-2xl">
-        <div class="space-y-4">
-          <div>
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">Monthly Investment (₹)</span>
-              <span id="sipAmtVal" class="text-indigo-400">₹5,000</span>
-            </div>
-            <input type="range" id="sipAmt" min="500" max="100000" step="500" value="5000" class="w-full accent-indigo-500 cursor-pointer" />
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">Expected Annual Return (%)</span>
-              <span id="sipRateVal" class="text-indigo-400">12%</span>
-            </div>
-            <input type="range" id="sipRate" min="1" max="30" step="0.5" value="12" class="w-full accent-indigo-500 cursor-pointer" />
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">Time Period (Years)</span>
-              <span id="sipYearsVal" class="text-indigo-400">10 Years</span>
-            </div>
-            <input type="range" id="sipYears" min="1" max="35" step="1" value="10" class="w-full accent-indigo-500 cursor-pointer" />
-          </div>
+      <!-- 1. SIP CALCULATOR -->
+      <section id="section-sip" class="block w-full">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white">SIP & Wealth Calculator</h2>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Monthly compounding investment returns</p>
         </div>
 
-        <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 flex flex-col justify-between space-y-4">
-          <div class="space-y-2 text-sm">
-            <div class="flex justify-between py-1 border-b border-slate-800">
-              <span class="text-slate-400">Total Invested</span>
-              <span id="sipTotalInvested" class="font-bold text-white">₹6,00,000</span>
-            </div>
-            <div class="flex justify-between py-1 border-b border-slate-800">
-              <span class="text-slate-400">Estimated Returns</span>
-              <span id="sipEstReturns" class="font-bold text-emerald-400">₹5,61,695</span>
-            </div>
-          </div>
-          <div class="p-4 bg-indigo-950/60 border border-indigo-500/30 rounded-lg">
-            <span class="text-xs text-indigo-300 uppercase tracking-wider font-semibold block">Total Maturity Value</span>
-            <span id="sipTotalMaturity" class="text-2xl font-extrabold text-indigo-400 mt-1 block">₹11,61,695</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. LOAN & EMI CALCULATOR -->
-    <section id="section-loan" class="hidden">
-      <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-white">Loan & EMI Calculator</h2>
-        <p class="text-slate-400 text-xs mt-1">Home loan, personal loan ya bike/car loan ki monthly EMI calculate karein.</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-6 bg-slate-800/60 border border-slate-800 p-6 rounded-2xl">
-        <div class="space-y-4">
-          <div>
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">Loan Amount (₹)</span>
-              <span id="loanAmtVal" class="text-indigo-400">₹5,00,000</span>
-            </div>
-            <input type="range" id="loanAmt" min="10000" max="5000000" step="10000" value="500000" class="w-full accent-indigo-500 cursor-pointer" />
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">Interest Rate (% p.a.)</span>
-              <span id="loanRateVal" class="text-indigo-400">10.5%</span>
-            </div>
-            <input type="range" id="loanRate" min="5" max="25" step="0.1" value="10.5" class="w-full accent-indigo-500 cursor-pointer" />
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">Loan Tenure (Years)</span>
-              <span id="loanTenureVal" class="text-indigo-400">5 Years</span>
-            </div>
-            <input type="range" id="loanTenure" min="1" max="30" step="1" value="5" class="w-full accent-indigo-500 cursor-pointer" />
-          </div>
-        </div>
-
-        <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 flex flex-col justify-between space-y-4">
-          <div class="space-y-2 text-sm">
-            <div class="flex justify-between py-1 border-b border-slate-800">
-              <span class="text-slate-400">Principal Amount</span>
-              <span id="loanPrincipal" class="font-bold text-white">₹5,00,000</span>
-            </div>
-            <div class="flex justify-between py-1 border-b border-slate-800">
-              <span class="text-slate-400">Total Interest Payable</span>
-              <span id="loanTotalInterest" class="font-bold text-rose-400">₹1,44,795</span>
-            </div>
-            <div class="flex justify-between py-1 border-b border-slate-800">
-              <span class="text-slate-400">Total Payment (Principal + Int)</span>
-              <span id="loanTotalPayment" class="font-bold text-slate-200">₹6,44,795</span>
-            </div>
-          </div>
-          <div class="p-4 bg-indigo-950/60 border border-indigo-500/30 rounded-lg">
-            <span class="text-xs text-indigo-300 uppercase tracking-wider font-semibold block">Monthly Loan EMI</span>
-            <span id="loanEmiDisplay" class="text-2xl font-extrabold text-indigo-400 mt-1 block">₹10,747</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. GST & PROFIT CALCULATOR -->
-    <section id="section-gst" class="hidden">
-      <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-white">GST & Profit Margin Calculator</h2>
-        <p class="text-slate-400 text-xs mt-1">Cost, margin aur GST ke sath MRP calculate karein.</p>
-      </div>
-
-      <div class="max-w-xl mx-auto bg-slate-800/60 border border-slate-800 p-6 rounded-2xl space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Cost Price (₹)</label>
-          <input type="number" id="gstCost" placeholder="e.g. 500" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Margin (%)</label>
-            <input type="number" id="gstMargin" placeholder="e.g. 20" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">GST Rate (%)</label>
-            <select id="gstRate" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500">
-              <option value="0">0%</option>
-              <option value="5">5%</option>
-              <option value="12">12%</option>
-              <option value="18" selected>18%</option>
-              <option value="28">28%</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="pt-4 border-t border-slate-700/60 space-y-3">
-          <div class="grid grid-cols-2 gap-3">
-            <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
-              <span class="text-xs text-slate-400 block">Profit</span>
-              <span id="gstProfitRes" class="text-base font-bold text-emerald-400">₹0.00</span>
-            </div>
-            <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
-              <span class="text-xs text-slate-400 block">GST Tax</span>
-              <span id="gstTaxRes" class="text-base font-bold text-indigo-400">₹0.00</span>
-            </div>
-          </div>
-          <div class="p-4 bg-indigo-600 rounded-xl text-white flex justify-between items-center">
+        <div class="grid md:grid-cols-2 gap-6 bg-slate-800/80 border border-slate-700/60 p-6 md:p-8 rounded-2xl shadow-2xl">
+          <div class="space-y-5">
             <div>
-              <span class="text-xs text-indigo-200 block">Final Selling Price (MRP)</span>
-              <span id="gstFinalRes" class="text-2xl font-extrabold">₹0.00</span>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300">Monthly Investment</span>
+                <span id="sipAmtVal" class="text-indigo-400 font-bold">₹5,000</span>
+              </div>
+              <input type="range" id="sipAmt" min="500" max="100000" step="500" value="5000" class="w-full accent-indigo-500 cursor-pointer h-2 bg-slate-700 rounded-lg" />
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300">Expected Annual Return</span>
+                <span id="sipRateVal" class="text-indigo-400 font-bold">12%</span>
+              </div>
+              <input type="range" id="sipRate" min="1" max="30" step="0.5" value="12" class="w-full accent-indigo-500 cursor-pointer h-2 bg-slate-700 rounded-lg" />
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300">Time Period</span>
+                <span id="sipYearsVal" class="text-indigo-400 font-bold">10 Years</span>
+              </div>
+              <input type="range" id="sipYears" min="1" max="35" step="1" value="10" class="w-full accent-indigo-500 cursor-pointer h-2 bg-slate-700 rounded-lg" />
+            </div>
+          </div>
+
+          <div class="bg-slate-900/90 rounded-xl p-6 border border-slate-800 flex flex-col justify-between space-y-4">
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
+                <span class="text-slate-400">Total Invested</span>
+                <span id="sipTotalInvested" class="font-bold text-white text-base">₹6,00,000</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
+                <span class="text-slate-400">Estimated Returns</span>
+                <span id="sipEstReturns" class="font-bold text-emerald-400 text-base">₹5,61,695</span>
+              </div>
+            </div>
+            <div class="p-4 bg-indigo-950/60 border border-indigo-500/30 rounded-xl text-center">
+              <span class="text-xs text-indigo-300 uppercase tracking-wider font-semibold block">Total Maturity Value</span>
+              <span id="sipTotalMaturity" class="text-2xl md:text-3xl font-extrabold text-indigo-400 mt-1 block">₹11,61,695</span>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 4. BABYLON 70-20-10 DEBT & BUDGET TOOL -->
-    <section id="section-babylon" class="hidden">
-      <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-white">Babylon 70-20-10 Financial Tool</h2>
-        <p class="text-slate-400 text-xs mt-1">70% Kharch, 20% Karz Mukti (Debt Payoff), aur 10% Wealth Building.</p>
-      </div>
+      <!-- 2. LOAN & EMI CALCULATOR -->
+      <section id="section-loan" class="hidden w-full">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Loan & EMI Calculator</h2>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Monthly EMI aur Interest payment calculate karein</p>
+        </div>
 
-      <div class="max-w-2xl mx-auto bg-slate-800/60 border border-slate-800 p-6 rounded-2xl space-y-5">
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-6 bg-slate-800/80 border border-slate-700/60 p-6 md:p-8 rounded-2xl shadow-2xl">
+          <div class="space-y-5">
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300">Loan Amount</span>
+                <span id="loanAmtVal" class="text-indigo-400 font-bold">₹5,00,000</span>
+              </div>
+              <input type="range" id="loanAmt" min="10000" max="5000000" step="10000" value="500000" class="w-full accent-indigo-500 cursor-pointer h-2 bg-slate-700 rounded-lg" />
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300">Interest Rate (% p.a.)</span>
+                <span id="loanRateVal" class="text-indigo-400 font-bold">10.5%</span>
+              </div>
+              <input type="range" id="loanRate" min="5" max="25" step="0.1" value="10.5" class="w-full accent-indigo-500 cursor-pointer h-2 bg-slate-700 rounded-lg" />
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300">Loan Tenure</span>
+                <span id="loanTenureVal" class="text-indigo-400 font-bold">5 Years</span>
+              </div>
+              <input type="range" id="loanTenure" min="1" max="30" step="1" value="5" class="w-full accent-indigo-500 cursor-pointer h-2 bg-slate-700 rounded-lg" />
+            </div>
+          </div>
+
+          <div class="bg-slate-900/90 rounded-xl p-6 border border-slate-800 flex flex-col justify-between space-y-4">
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
+                <span class="text-slate-400">Principal</span>
+                <span id="loanPrincipal" class="font-bold text-white">₹5,00,000</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
+                <span class="text-slate-400">Total Interest</span>
+                <span id="loanTotalInterest" class="font-bold text-rose-400">₹1,44,795</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
+                <span class="text-slate-400">Total Payable</span>
+                <span id="loanTotalPayment" class="font-bold text-slate-200">₹6,44,795</span>
+              </div>
+            </div>
+            <div class="p-4 bg-indigo-950/60 border border-indigo-500/30 rounded-xl text-center">
+              <span class="text-xs text-indigo-300 uppercase tracking-wider font-semibold block">Monthly EMI</span>
+              <span id="loanEmiDisplay" class="text-2xl md:text-3xl font-extrabold text-indigo-400 mt-1 block">₹10,747</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. GST & PROFIT CALCULATOR -->
+      <section id="section-gst" class="hidden w-full">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white">GST & Profit Margin Calculator</h2>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Cost, margin aur GST ke sath MRP nikaalein</p>
+        </div>
+
+        <div class="max-w-lg mx-auto bg-slate-800/80 border border-slate-700/60 p-6 md:p-8 rounded-2xl space-y-4 shadow-2xl">
           <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Monthly Income (₹)</label>
-            <input type="number" id="babylonIncome" placeholder="e.g. 50000" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Cost Price (₹)</label>
+            <input type="number" id="gstCost" placeholder="e.g. 500" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total Outstanding Debt (₹)</label>
-            <input type="number" id="babylonDebt" placeholder="e.g. 100000" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Margin (%)</label>
+              <input type="number" id="gstMargin" placeholder="e.g. 20" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">GST Rate (%)</label>
+              <select id="gstRate" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="0">0%</option>
+                <option value="5">5%</option>
+                <option value="12">12%</option>
+                <option value="18" selected>18%</option>
+                <option value="28">28%</option>
+              </select>
+            </div>
           </div>
-        </div>
 
-        <div class="grid md:grid-cols-3 gap-3 pt-3">
-          <div class="p-4 bg-slate-900 rounded-xl border border-slate-800">
-            <span class="text-xs font-semibold text-amber-400 block uppercase">70% Living Expenses</span>
-            <span id="babylonLiving" class="text-xl font-bold text-white mt-1 block">₹0</span>
-            <p class="text-[11px] text-slate-400 mt-1">Ghar kharch aur zaroorat</p>
-          </div>
-          <div class="p-4 bg-slate-900 rounded-xl border border-slate-800">
-            <span class="text-xs font-semibold text-rose-400 block uppercase">20% Debt Payoff</span>
-            <span id="babylonDebtPay" class="text-xl font-bold text-white mt-1 block">₹0</span>
-            <p class="text-[11px] text-slate-400 mt-1">Har mahine loan me</p>
-          </div>
-          <div class="p-4 bg-slate-900 rounded-xl border border-slate-800">
-            <span class="text-xs font-semibold text-emerald-400 block uppercase">10% Wealth / Gold</span>
-            <span id="babylonSavings" class="text-xl font-bold text-white mt-1 block">₹0</span>
-            <p class="text-[11px] text-slate-400 mt-1">Future wealth creation</p>
-          </div>
-        </div>
-
-        <div id="babylonPayoffBox" class="p-4 bg-indigo-950/60 border border-indigo-500/30 rounded-xl text-center">
-          <span class="text-xs text-indigo-300 font-semibold uppercase">Estimated Debt-Free Timeline</span>
-          <span id="babylonMonthsRes" class="text-2xl font-extrabold text-indigo-400 mt-1 block">0 Months</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. CREATOR TOOLS -->
-    <section id="section-creator" class="hidden">
-      <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-white">Social Media Caption & Hook Formatter</h2>
-        <p class="text-slate-400 text-xs mt-1">Reels, Shorts aur posts ke text ko clean line-breaks aur bullet points mein format karein.</p>
-      </div>
-
-      <div class="max-w-2xl mx-auto bg-slate-800/60 border border-slate-800 p-6 rounded-2xl space-y-4">
-        <textarea id="creatorText" rows="6" placeholder="Apna caption, hooks ya tags yahan paste karein..." class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500 text-sm"></textarea>
-        
-        <div class="flex flex-wrap gap-2">
-          <button onclick="cleanSpaces()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg transition">Clean Extra Lines</button>
-          <button onclick="makeBullets()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg transition">Add Bullet Points (•)</button>
-          <button onclick="makeUpper()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg transition">UPPERCASE</button>
-          <button onclick="copyCreatorText()" class="ml-auto px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-xs font-bold rounded-lg transition">Copy Text</button>
-        </div>
-
-        <div class="text-xs text-slate-400 pt-2 flex justify-between">
-          <span id="charCount">Characters: 0</span>
-          <span id="wordCount">Words: 0</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. CLIENT-SIDE IMAGE RESIZER & COMPRESSOR -->
-    <section id="section-image" class="hidden">
-      <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-white">Client-side Image Compressor</h2>
-        <p class="text-slate-400 text-xs mt-1">Browser ke andar bina server upload kiye photo resize aur compress karein.</p>
-      </div>
-
-      <div class="max-w-xl mx-auto bg-slate-800/60 border border-slate-800 p-6 rounded-2xl space-y-4">
-        <input type="file" id="imageInput" accept="image/*" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer" />
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Max Width (px)</label>
-            <input type="number" id="imgWidth" value="1200" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none text-sm" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Quality (10% - 100%)</label>
-            <input type="range" id="imgQuality" min="0.1" max="1.0" step="0.05" value="0.75" class="w-full accent-indigo-500 cursor-pointer mt-2" />
+          <div class="pt-4 border-t border-slate-700/60 space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
+                <span class="text-xs text-slate-400 block">Profit</span>
+                <span id="gstProfitRes" class="text-base font-bold text-emerald-400">₹0.00</span>
+              </div>
+              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
+                <span class="text-xs text-slate-400 block">GST Tax</span>
+                <span id="gstTaxRes" class="text-base font-bold text-indigo-400">₹0.00</span>
+              </div>
+            </div>
+            <div class="p-4 bg-indigo-600 rounded-xl text-white flex justify-between items-center shadow-lg">
+              <div>
+                <span class="text-xs text-indigo-200 block">Final Price (MRP)</span>
+                <span id="gstFinalRes" class="text-2xl font-extrabold">₹0.00</span>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <button onclick="processImage()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 font-bold text-sm rounded-xl transition">Compress & Preview</button>
-
-        <div id="imagePreviewBox" class="hidden pt-4 border-t border-slate-700 space-y-3 text-center">
-          <img id="previewImg" class="max-h-48 mx-auto rounded-lg border border-slate-700 object-contain" />
-          <div class="text-xs text-slate-400" id="imgSizeDetails"></div>
-          <a id="downloadBtn" download="compressed.jpg" class="inline-block px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-xs font-bold rounded-lg text-white transition">Download Compressed Image</a>
+      <!-- 4. BABYLON 70-20-10 TOOL -->
+      <section id="section-babylon" class="hidden w-full">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Babylon 70-20-10 Financial Tool</h2>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">70% Kharch, 20% Karz Mukti, 10% Wealth</p>
         </div>
-      </div>
-    </section>
 
+        <div class="max-w-xl mx-auto bg-slate-800/80 border border-slate-700/60 p-6 md:p-8 rounded-2xl space-y-5 shadow-2xl">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Monthly Income (₹)</label>
+              <input type="number" id="babylonIncome" placeholder="e.g. 50000" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total Debt (₹)</label>
+              <input type="number" id="babylonDebt" placeholder="e.g. 100000" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 pt-2">
+            <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-center">
+              <span class="text-[11px] font-semibold text-amber-400 block uppercase">70% Expense</span>
+              <span id="babylonLiving" class="text-base md:text-lg font-bold text-white mt-1 block">₹0</span>
+            </div>
+            <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-center">
+              <span class="text-[11px] font-semibold text-rose-400 block uppercase">20% Debt</span>
+              <span id="babylonDebtPay" class="text-base md:text-lg font-bold text-white mt-1 block">₹0</span>
+            </div>
+            <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-center">
+              <span class="text-[11px] font-semibold text-emerald-400 block uppercase">10% Wealth</span>
+              <span id="babylonSavings" class="text-base md:text-lg font-bold text-white mt-1 block">₹0</span>
+            </div>
+          </div>
+
+          <div class="p-4 bg-indigo-950/60 border border-indigo-500/30 rounded-xl text-center">
+            <span class="text-xs text-indigo-300 font-semibold uppercase">Estimated Debt-Free Timeline</span>
+            <span id="babylonMonthsRes" class="text-2xl font-extrabold text-indigo-400 mt-1 block">0 Months</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. CREATOR TOOLS -->
+      <section id="section-creator" class="hidden w-full">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Caption & Hook Formatter</h2>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Text clean karein aur viral hooks banayein</p>
+        </div>
+
+        <div class="max-w-xl mx-auto bg-slate-800/80 border border-slate-700/60 p-6 rounded-2xl space-y-4 shadow-2xl">
+          <textarea id="creatorText" rows="6" placeholder="Apna text ya caption paste karein..." class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-500 text-sm"></textarea>
+          
+          <div class="flex flex-wrap gap-2">
+            <button onclick="cleanSpaces()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg transition">Clean Lines</button>
+            <button onclick="makeBullets()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg transition">Bullet Points (•)</button>
+            <button onclick="makeUpper()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg transition">UPPERCASE</button>
+            <button onclick="copyCreatorText()" class="ml-auto px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-xs font-bold rounded-lg transition">Copy Text</button>
+          </div>
+
+          <div class="text-xs text-slate-400 pt-1 flex justify-between">
+            <span id="charCount">Characters: 0</span>
+            <span id="wordCount">Words: 0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. IMAGE COMPRESSOR -->
+      <section id="section-image" class="hidden w-full">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Image Compressor</h2>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">Browser ke andar images optimize karein</p>
+        </div>
+
+        <div class="max-w-lg mx-auto bg-slate-800/80 border border-slate-700/60 p-6 rounded-2xl space-y-4 shadow-2xl">
+          <input type="file" id="imageInput" accept="image/*" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white cursor-pointer" />
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Max Width (px)</label>
+              <input type="number" id="imgWidth" value="1200" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Quality</label>
+              <input type="range" id="imgQuality" min="0.1" max="1.0" step="0.05" value="0.75" class="w-full accent-indigo-500 cursor-pointer mt-2" />
+            </div>
+          </div>
+
+          <button onclick="processImage()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 font-bold text-sm rounded-xl transition">Compress & Preview</button>
+
+          <div id="imagePreviewBox" class="hidden pt-4 border-t border-slate-700 space-y-3 text-center">
+            <img id="previewImg" class="max-h-48 mx-auto rounded-lg border border-slate-700 object-contain" />
+            <div class="text-xs text-slate-400" id="imgSizeDetails"></div>
+            <a id="downloadBtn" download="compressed.jpg" class="inline-block px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-xs font-bold rounded-lg text-white transition">Download Image</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
   </main>
 
+  <footer class="py-4 text-center text-xs text-slate-600 border-t border-slate-800">
+    © Vinsona Media Tools. Built for performance.
+  </footer>
+
   <script>
-    // Tab Navigation
     function switchTab(tab) {
       const tabs = ['sip', 'loan', 'gst', 'babylon', 'creator', 'image'];
       tabs.forEach(t => {
@@ -308,7 +334,7 @@
       document.getElementById(`tab-${tab}`).classList.remove('text-slate-400');
     }
 
-    // 1. SIP Calculator
+    // SIP
     const sipAmt = document.getElementById('sipAmt');
     const sipRate = document.getElementById('sipRate');
     const sipYears = document.getElementById('sipYears');
@@ -335,7 +361,7 @@
     [sipAmt, sipRate, sipYears].forEach(el => el.addEventListener('input', calculateSIP));
     calculateSIP();
 
-    // 2. Loan / EMI Calculator
+    // Loan
     const loanAmt = document.getElementById('loanAmt');
     const loanRate = document.getElementById('loanRate');
     const loanTenure = document.getElementById('loanTenure');
@@ -361,7 +387,7 @@
     [loanAmt, loanRate, loanTenure].forEach(el => el.addEventListener('input', calculateLoan));
     calculateLoan();
 
-    // 3. GST Calculator
+    // GST
     const gstCost = document.getElementById('gstCost');
     const gstMargin = document.getElementById('gstMargin');
     const gstRate = document.getElementById('gstRate');
@@ -382,7 +408,7 @@
     }
     [gstCost, gstMargin, gstRate].forEach(el => el.addEventListener('input', calculateGST));
 
-    // 4. Babylon 70-20-10 Tool
+    // Babylon
     const babylonIncome = document.getElementById('babylonIncome');
     const babylonDebt = document.getElementById('babylonDebt');
 
@@ -401,14 +427,14 @@
       if (debtPay > 0 && debt > 0) {
         const months = Math.ceil(debt / debtPay);
         const years = (months / 12).toFixed(1);
-        document.getElementById('babylonMonthsRes').textContent = `${months} Months (~${years} Years)`;
+        document.getElementById('babylonMonthsRes').textContent = `${months} Months (~${years} Yrs)`;
       } else {
         document.getElementById('babylonMonthsRes').textContent = '0 Months';
       }
     }
     [babylonIncome, babylonDebt].forEach(el => el.addEventListener('input', calculateBabylon));
 
-    // 5. Creator Tools
+    // Creator
     const creatorText = document.getElementById('creatorText');
     creatorText.addEventListener('input', () => {
       const val = creatorText.value;
@@ -430,7 +456,7 @@
       navigator.clipboard.writeText(creatorText.value);
     }
 
-    // 6. Image Resizer & Compressor
+    // Image
     function processImage() {
       const file = document.getElementById('imageInput').files[0];
       if (!file) return alert('Pehle image select karein!');
