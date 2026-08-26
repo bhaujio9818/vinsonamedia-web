@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- High-Ranking SEO & Finance Meta Tags -->
+  <title>SIP Calculator Online - Mutual Fund Wealth & Return Planner | Vinsona Media</title>
+  <meta name="title" content="SIP Calculator Online - Mutual Fund Wealth & Return Planner | Vinsona Media" />
+  <meta name="description" content="Calculate your SIP investment returns, total future wealth, and capital gains on mutual funds. Free online Systematic Investment Plan calculator by Vinsona Media." />
+  <meta name="keywords" content="sip calculator online, mutual fund return calculator, systematic investment plan india, monthly investment planner, sip wealth generator, compound interest investment tool" />
+  <meta name="author" content="Vinsona Media" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.vinsonamedia.in/sip-calculator.html" />
+  <meta property="og:title" content="Free SIP Calculator - Plan Your Financial Freedom" />
+  <meta property="og:description" content="Plan your monthly mutual fund investments and calculate maturity values instantly with detailed returns breakdown." />
+
+  <!-- Google Rich Snippet Structured Data (Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SIP Wealth & Mutual Fund Calculator",
+    "url": "https://www.vinsonamedia.in/sip-calculator.html",
+    "description": "Financial planning tool to compute future value of systematic monthly investments with compounding growth.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "INR"
+    }
+  }
+  </script>
+
+  <!-- Google AdSense Verification Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4077161497406015" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body { background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    .card { background: #1e293b; border: 1px solid #334155; }
+    .input-field { background: #0f172a; border: 1px solid #334155; color: white; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="card p-4 border-b border-slate-800">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <a href="/" class="text-xl font-bold text-amber-400 flex items-center gap-2">
+        <i class="fa-solid fa-chart-line"></i> Vinsona Tools Hub
+      </a>
+      <a href="/" class="text-sm bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300">
+        <i class="fa-solid fa-house mr-1"></i> All Tools
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Calculator -->
+  <main class="max-w-3xl mx-auto p-4 md:p-6 w-full my-6">
+    <div class="card p-6 rounded-2xl shadow-xl">
+      <h1 class="text-2xl font-bold text-white mb-2 text-center">SIP Calculator India</h1>
+      <p class="text-slate-400 text-sm text-center mb-6">Calculate future value of your monthly mutual fund investments.</p>
+
+      <div class="space-y-5">
+        <div>
+          <div class="flex justify-between text-sm font-medium text-slate-300 mb-1">
+            <span>Monthly Investment (₹)</span>
+            <span id="label-monthly" class="text-amber-400 font-bold">₹5,000</span>
+          </div>
+          <input type="range" id="sip-monthly" min="500" max="100000" step="500" value="5000" class="w-full accent-amber-500 cursor-pointer" />
+        </div>
+
+        <div>
+          <div class="flex justify-between text-sm font-medium text-slate-300 mb-1">
+            <span>Expected Return Rate (% p.a)</span>
+            <span id="label-return" class="text-amber-400 font-bold">12%</span>
+          </div>
+          <input type="range" id="sip-rate" min="1" max="30" step="0.5" value="12" class="w-full accent-amber-500 cursor-pointer" />
+        </div>
+
+        <div>
+          <div class="flex justify-between text-sm font-medium text-slate-300 mb-1">
+            <span>Time Period (Years)</span>
+            <span id="label-years" class="text-amber-400 font-bold">10 Years</span>
+          </div>
+          <input type="range" id="sip-years" min="1" max="40" step="1" value="10" class="w-full accent-amber-500 cursor-pointer" />
+        </div>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-700">
+        <div class="bg-slate-900/80 p-4 rounded-xl text-center border border-slate-800">
+          <div class="text-xs text-slate-400 mb-1">Invested Amount</div>
+          <div id="res-invested" class="text-xl font-bold text-white">₹6,00,000</div>
+        </div>
+        <div class="bg-slate-900/80 p-4 rounded-xl text-center border border-slate-800">
+          <div class="text-xs text-amber-400 mb-1">Estimated Returns</div>
+          <div id="res-returns" class="text-xl font-bold text-amber-400">₹5,61,695</div>
+        </div>
+        <div class="bg-slate-900/80 p-4 rounded-xl text-center border border-slate-800">
+          <div class="text-xs text-emerald-400 mb-1">Total Future Value</div>
+          <div id="res-total" class="text-xl font-bold text-emerald-400">₹11,61,695</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-xs text-slate-500 py-6 border-t border-slate-800">
+    © 2026 Vinsona Media. All rights reserved. | <a href="/" class="hover:underline text-slate-400">Home</a>
+  </footer>
+
+  <script>
+    const monthlyInput = document.getElementById('sip-monthly');
+    const rateInput = document.getElementById('sip-rate');
+    const yearsInput = document.getElementById('sip-years');
+
+    function calculateSIP() {
+      const p = parseFloat(monthlyInput.value);
+      const annualRate = parseFloat(rateInput.value);
+      const y = parseFloat(yearsInput.value);
+
+      document.getElementById('label-monthly').innerText = '₹' + p.toLocaleString('en-IN');
+      document.getElementById('label-return').innerText = annualRate + '%';
+      document.getElementById('label-years').innerText = y + ' Years';
+
+      const i = annualRate / 12 / 100;
+      const n = y * 12;
+
+      // Compound SIP formula: M = P * [((1 + i)^n - 1) / i] * (1 + i)
+      const totalValue = p * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+      const investedAmount = p * n;
+      const returnsEarned = totalValue - investedAmount;
+
+      document.getElementById('res-invested').innerText = '₹' + Math.round(investedAmount).toLocaleString('en-IN');
+      document.getElementById('res-returns').innerText = '₹' + Math.round(returnsEarned).toLocaleString('en-IN');
+      document.getElementById('res-total').innerText = '₹' + Math.round(totalValue).toLocaleString('en-IN');
+    }
+
+    monthlyInput.addEventListener('input', calculateSIP);
+    rateInput.addEventListener('input', calculateSIP);
+    yearsInput.addEventListener('input', calculateSIP);
+
+    calculateSIP();
+  </script>
+</body>
+</html>
